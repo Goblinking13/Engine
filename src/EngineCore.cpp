@@ -7,7 +7,6 @@
 #include "mesh.h"
 #include<glm/gtc/type_ptr.hpp>
 
-#include "aircraft.h"
 #include "cube.h"
 #include "grid.h"
 #include "rotatedCube.h"
@@ -91,9 +90,7 @@ void EngineCore::gameLoop() {
 
   simpleCube->setPosition(glm::vec3(0.0f, 2.0f, 4.0f));
 
-  game::model::aircraft plane;
-  plane.setShader(&textureShader);
-  plane.setPosition(glm::vec3(0.0f, 5.0f, 0.0f));
+
 
   addObject(simpleCube.get());
   addObject(boxCube.get());
