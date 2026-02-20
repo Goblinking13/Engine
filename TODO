@@ -1,0 +1,11 @@
+add textures
+add model loader
+add lighting
+add shadows
+add collision
+add entity class
+refactor mesh class add normiles and texCords
+add model class
+add car class
+add car phisic (car can ride on flat surface, have tire path, can drift)
+
