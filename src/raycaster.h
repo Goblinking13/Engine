@@ -14,6 +14,7 @@ namespace game {
         std::unique_ptr<pointCloud>  pointCloud_;
         float accumulatedTime_;
         std::mt19937 rng_{std::random_device{}()};
+        float maxDist = 10;
 
         bool castRay(glm::vec3 &dir, glm::vec3 &pos, glm::vec3 &v0, glm::vec3 &v1, glm::vec3 &v2,
             float &t, float &u, float &v,float eps = 0.001);

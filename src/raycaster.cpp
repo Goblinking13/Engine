@@ -6,7 +6,7 @@
 
 namespace game {
 
-    raycaster::raycaster(shader* shader) : pointCloud_(std::make_unique<pointCloud>(shader, 10000))
+    raycaster::raycaster(shader* shader) : pointCloud_(std::make_unique<pointCloud>(shader, 50000))
     {
 
 
@@ -40,8 +40,8 @@ namespace game {
 
             std::vector<glm::vec3> points;
 
-            float yawAngle = 10;
-            float pitchAngle = 45;
+            float yawAngle = 15;
+            float pitchAngle = 10;
 
             std::uniform_real_distribution<float> yawDist(-yawAngle, yawAngle);
             std::uniform_real_distribution<float> pitchDist(-pitchAngle, pitchAngle);
@@ -107,6 +107,8 @@ namespace game {
                             glm::vec3 hit = rayOrig + nRayDir * t;
                             hit += n * bias;
                             // pointCloud_->addPoint(hit);
+
+                            if(glm::length(rayOrig - hit) <= maxDist)
                             points.push_back(hit);
 
                         }
