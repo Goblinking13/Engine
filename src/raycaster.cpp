@@ -22,43 +22,65 @@ namespace game {
         accumulatedTime += dt;
         // int step = 10;
 
-        if(accumulatedTime >= 0.1) {
+        if(accumulatedTime >= 1) {
             glm::vec3 rayOrig = camera_->getPosition();
             glm::vec3 rayDir  = camera_->getCameraDirection();
             rayDir = glm::normalize(rayDir);
 
-            for (auto& obj : *meshes_) {
-                glm::mat4 model = obj->getModelMatrix();
-
-                for (int k = 0; k + 2 < (int)obj->indices_.size(); k += 3) {
-                    int i0 = obj->indices_[k];
-                    int i1 = obj->indices_[k+1];
-                    int i2 = obj->indices_[k+2];
-
-                    glm::vec3 aL = obj->vertices_[i0].position;
-                    glm::vec3 bL = obj->vertices_[i1].position;
-                    glm::vec3 cL = obj->vertices_[i2].position;
-
-                    glm::vec3 aW = glm::vec3(model * glm::vec4(aL, 1.0f));
-                    glm::vec3 bW = glm::vec3(model * glm::vec4(bL, 1.0f));
-                    glm::vec3 cW = glm::vec3(model * glm::vec4(cL, 1.0f));
-
-                    float t, u, v;
-                    if (castRay(rayDir, rayOrig, aW, bW, cW, t, u, v, 1e-6f)) {
-
-                        glm::vec3 n = glm::normalize(glm::cross(bW - aW, cW - aW));
+            int pointCount= 10;
+            float fov = 90;
 
 
-                        if (glm::dot(n, rayDir) > 0.0f) n = -n;
 
-                        const float bias = 0.015f;
-                        glm::vec3 hit = rayOrig + rayDir * t;
-                        hit += n * bias;
-                        pointCloud_->addPoint(hit);
+            std::vector<glm::vec3> points;
 
+            for(int i = 0; i < pointCount; i++) {
+
+                glm::mat4 rot = glm::rotate(glm::mat4(1.0f),
+                                            glm::radians(-fov/2 + fov/pointCount * i ),
+                                            glm::vec3(1, 0, 0));
+
+                glm::vec3 nRayDir = glm::vec3(rot * glm::vec4(rayDir, 1.0f));
+
+                for (auto& obj : *meshes_) {
+                    glm::mat4 model = obj->getModelMatrix();
+
+                    for (int k = 0; k + 2 < (int)obj->indices_.size(); k += 3) {
+                        int i0 = obj->indices_[k];
+                        int i1 = obj->indices_[k+1];
+                        int i2 = obj->indices_[k+2];
+
+                        glm::vec3 aL = obj->vertices_[i0].position;
+                        glm::vec3 bL = obj->vertices_[i1].position;
+                        glm::vec3 cL = obj->vertices_[i2].position;
+
+                        glm::vec3 aW = glm::vec3(model * glm::vec4(aL, 1.0f));
+                        glm::vec3 bW = glm::vec3(model * glm::vec4(bL, 1.0f));
+                        glm::vec3 cW = glm::vec3(model * glm::vec4(cL, 1.0f));
+
+                        float t, u, v;
+                        if (castRay(nRayDir, rayOrig, aW, bW, cW, t, u, v, 1e-6f)) {
+
+                            glm::vec3 n = glm::normalize(glm::cross(bW - aW, cW - aW));
+
+
+                            if (glm::dot(n, nRayDir) > 0.0f) n = -n;
+
+                            const float bias = 0.015f;
+                            glm::vec3 hit = rayOrig + nRayDir * t;
+                            hit += n * bias;
+                            // pointCloud_->addPoint(hit);
+                            points.push_back(hit);
+
+                        }
                     }
                 }
+
             }
+
+
+            pointCloud_->addPoints(points);
+
 
         }
 
