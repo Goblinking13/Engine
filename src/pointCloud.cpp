@@ -96,7 +96,7 @@ namespace game{
 
     void pointCloud::render() {
 
-        std::cout << "clud render" << std::endl;
+        // std::cout << "clud render" << std::endl;
 
         if (!shader_) return;
         shader_->use();

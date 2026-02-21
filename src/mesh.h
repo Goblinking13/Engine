@@ -15,8 +15,7 @@ namespace game {
 
     class mesh : public object, public renderable {
       protected:
-         std::vector<Vertex> vertices_;
-        std::vector<unsigned int> indices_;
+
          unsigned int VAO_;
          unsigned int VBO_;
          unsigned int EBO_;
@@ -24,6 +23,9 @@ namespace game {
          bool meshLoaded_;
 
         public:
+            std::vector<Vertex> vertices_;
+            std::vector<unsigned int> indices_;
+
           mesh();
           mesh(const std::vector<Vertex>& vertices,const std::vector<unsigned int>& indices);
           virtual void loadMesh(const std::vector<Vertex>& vertices,const std::vector<unsigned int>& indices);

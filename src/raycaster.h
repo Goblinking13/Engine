@@ -14,6 +14,9 @@ namespace game {
         std::unique_ptr<pointCloud>  pointCloud_;
         float accumulatedTime;
 
+        bool castRay(glm::vec3 &dir, glm::vec3 &pos, glm::vec3 &v0, glm::vec3 &v1, glm::vec3 &v2,
+            float &t, float &u, float &v,float eps = 0.001);
+
 
         public:
         void setSceneMesh(std::vector<materialMesh*>* mesh) { meshes_ = mesh; }
