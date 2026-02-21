@@ -7,6 +7,7 @@ game::window::window(int width, int height) : width_(width), height_(height) {
   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
   glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
+
   // glfwWindowHint(GLFW_DEPTH_BITS, 32);
 
   glfwWindowHint(GLFW_SAMPLES, 16);
@@ -14,6 +15,8 @@ game::window::window(int width, int height) : width_(width), height_(height) {
   window_ = glfwCreateWindow(width, height, "Waves", nullptr, nullptr);
   glfwMakeContextCurrent(window_);
   glfwSetInputMode(window_, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
+  glEnable(GL_PROGRAM_POINT_SIZE);
 
    // glfwSwapInterval(0);
 

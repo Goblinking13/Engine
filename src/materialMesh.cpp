@@ -21,6 +21,7 @@ void game::materialMesh::render() {
 
 
     shader_->use();
+    auto tmp = getModelMatrix();
     glm::mat4 inverseMatrix = glm::inverse(getModelMatrix());
     shader_->loadUniformMat4(inverseMatrix, "inverseModel");
     shader_->loadUniformMat4(getModelMatrix(), "model");
@@ -151,4 +152,9 @@ void game::materialMesh::renderWithoutUniform() {
     mesh::draw();
     glActiveTexture(GL_TEXTURE0);
 
+}
+
+
+game::shader* game::materialMesh::getShader() const {
+    return shader_;
 }

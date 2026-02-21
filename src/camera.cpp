@@ -104,6 +104,7 @@ void game::camera::setActiveWindow(GLFWwindow* window) {
 
 
 void game::camera::update(const float dt) {
+    std::cout << "camera update " << std::endl;
     updateMovable(dt);
 }
 

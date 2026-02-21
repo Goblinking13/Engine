@@ -30,6 +30,7 @@ namespace game{
         // void loadMesh(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices) override;
 
         void setShader(shader* shader);
+        shader* getShader() const;
 
         void addTexture(texture texture);
 

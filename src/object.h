@@ -28,13 +28,13 @@ namespace game {
         // glm::vec3 scale_ = glm::vec3(1,1,1);
         // glm::vec3 rotation_ = glm::vec3(0, 0, 0);
 
-        void updateModelMatrix();
+
 
         protected:
         bool dirty_ = true;
 
         public:
-
+        void updateModelMatrix();
         object();
         explicit object(const glm::vec3& position);
         virtual void update(float dt) =0;
@@ -48,10 +48,12 @@ namespace game {
         void rotate(const glm::vec3& axis, float angle);
 
 
+
         glm::vec3 getPosition() const;
         glm::vec3 getScale() const;
         glm::quat getRotation() const;
         glm::mat4 getModelMatrix();
+        void setModelMatrix(const glm::mat4& model) const;
 
 
 

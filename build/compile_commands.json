@@ -1,0 +1,104 @@
+[
+{
+  "directory": "/Users/artem/Desktop/engine_test/Engine/build",
+  "command": "/usr/bin/c++  -I/opt/homebrew/Cellar/assimp/6.0.2/include -F/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks -isystem /opt/homebrew/include -std=gnu++17 -arch arm64 -o CMakeFiles/RacingGame.dir/src/window.cpp.o -c /Users/artem/Desktop/engine_test/Engine/src/window.cpp",
+  "file": "/Users/artem/Desktop/engine_test/Engine/src/window.cpp",
+  "output": "CMakeFiles/RacingGame.dir/src/window.cpp.o"
+},
+{
+  "directory": "/Users/artem/Desktop/engine_test/Engine/build",
+  "command": "/usr/bin/c++  -I/opt/homebrew/Cellar/assimp/6.0.2/include -F/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks -isystem /opt/homebrew/include -std=gnu++17 -arch arm64 -o CMakeFiles/RacingGame.dir/src/main.cpp.o -c /Users/artem/Desktop/engine_test/Engine/src/main.cpp",
+  "file": "/Users/artem/Desktop/engine_test/Engine/src/main.cpp",
+  "output": "CMakeFiles/RacingGame.dir/src/main.cpp.o"
+},
+{
+  "directory": "/Users/artem/Desktop/engine_test/Engine/build",
+  "command": "/usr/bin/c++  -I/opt/homebrew/Cellar/assimp/6.0.2/include -F/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks -isystem /opt/homebrew/include -std=gnu++17 -arch arm64 -o CMakeFiles/RacingGame.dir/src/EngineCore.cpp.o -c /Users/artem/Desktop/engine_test/Engine/src/EngineCore.cpp",
+  "file": "/Users/artem/Desktop/engine_test/Engine/src/EngineCore.cpp",
+  "output": "CMakeFiles/RacingGame.dir/src/EngineCore.cpp.o"
+},
+{
+  "directory": "/Users/artem/Desktop/engine_test/Engine/build",
+  "command": "/usr/bin/c++  -I/opt/homebrew/Cellar/assimp/6.0.2/include -F/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks -isystem /opt/homebrew/include -std=gnu++17 -arch arm64 -o CMakeFiles/RacingGame.dir/src/object.cpp.o -c /Users/artem/Desktop/engine_test/Engine/src/object.cpp",
+  "file": "/Users/artem/Desktop/engine_test/Engine/src/object.cpp",
+  "output": "CMakeFiles/RacingGame.dir/src/object.cpp.o"
+},
+{
+  "directory": "/Users/artem/Desktop/engine_test/Engine/build",
+  "command": "/usr/bin/c++  -I/opt/homebrew/Cellar/assimp/6.0.2/include -F/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks -isystem /opt/homebrew/include -std=gnu++17 -arch arm64 -o CMakeFiles/RacingGame.dir/src/shader.cpp.o -c /Users/artem/Desktop/engine_test/Engine/src/shader.cpp",
+  "file": "/Users/artem/Desktop/engine_test/Engine/src/shader.cpp",
+  "output": "CMakeFiles/RacingGame.dir/src/shader.cpp.o"
+},
+{
+  "directory": "/Users/artem/Desktop/engine_test/Engine/build",
+  "command": "/usr/bin/c++  -I/opt/homebrew/Cellar/assimp/6.0.2/include -F/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks -isystem /opt/homebrew/include -std=gnu++17 -arch arm64 -o CMakeFiles/RacingGame.dir/src/renderable.cpp.o -c /Users/artem/Desktop/engine_test/Engine/src/renderable.cpp",
+  "file": "/Users/artem/Desktop/engine_test/Engine/src/renderable.cpp",
+  "output": "CMakeFiles/RacingGame.dir/src/renderable.cpp.o"
+},
+{
+  "directory": "/Users/artem/Desktop/engine_test/Engine/build",
+  "command": "/usr/bin/c++  -I/opt/homebrew/Cellar/assimp/6.0.2/include -F/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks -isystem /opt/homebrew/include -std=gnu++17 -arch arm64 -o CMakeFiles/RacingGame.dir/src/movable.cpp.o -c /Users/artem/Desktop/engine_test/Engine/src/movable.cpp",
+  "file": "/Users/artem/Desktop/engine_test/Engine/src/movable.cpp",
+  "output": "CMakeFiles/RacingGame.dir/src/movable.cpp.o"
+},
+{
+  "directory": "/Users/artem/Desktop/engine_test/Engine/build",
+  "command": "/usr/bin/c++  -I/opt/homebrew/Cellar/assimp/6.0.2/include -F/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks -isystem /opt/homebrew/include -std=gnu++17 -arch arm64 -o CMakeFiles/RacingGame.dir/src/mesh.cpp.o -c /Users/artem/Desktop/engine_test/Engine/src/mesh.cpp",
+  "file": "/Users/artem/Desktop/engine_test/Engine/src/mesh.cpp",
+  "output": "CMakeFiles/RacingGame.dir/src/mesh.cpp.o"
+},
+{
+  "directory": "/Users/artem/Desktop/engine_test/Engine/build",
+  "command": "/usr/bin/c++  -I/opt/homebrew/Cellar/assimp/6.0.2/include -F/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks -isystem /opt/homebrew/include -std=gnu++17 -arch arm64 -o CMakeFiles/RacingGame.dir/src/camera.cpp.o -c /Users/artem/Desktop/engine_test/Engine/src/camera.cpp",
+  "file": "/Users/artem/Desktop/engine_test/Engine/src/camera.cpp",
+  "output": "CMakeFiles/RacingGame.dir/src/camera.cpp.o"
+},
+{
+  "directory": "/Users/artem/Desktop/engine_test/Engine/build",
+  "command": "/usr/bin/c++  -I/opt/homebrew/Cellar/assimp/6.0.2/include -F/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks -isystem /opt/homebrew/include -std=gnu++17 -arch arm64 -o CMakeFiles/RacingGame.dir/src/controllable.cpp.o -c /Users/artem/Desktop/engine_test/Engine/src/controllable.cpp",
+  "file": "/Users/artem/Desktop/engine_test/Engine/src/controllable.cpp",
+  "output": "CMakeFiles/RacingGame.dir/src/controllable.cpp.o"
+},
+{
+  "directory": "/Users/artem/Desktop/engine_test/Engine/build",
+  "command": "/usr/bin/c++  -I/opt/homebrew/Cellar/assimp/6.0.2/include -F/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks -isystem /opt/homebrew/include -std=gnu++17 -arch arm64 -o CMakeFiles/RacingGame.dir/src/cube.cpp.o -c /Users/artem/Desktop/engine_test/Engine/src/cube.cpp",
+  "file": "/Users/artem/Desktop/engine_test/Engine/src/cube.cpp",
+  "output": "CMakeFiles/RacingGame.dir/src/cube.cpp.o"
+},
+{
+  "directory": "/Users/artem/Desktop/engine_test/Engine/build",
+  "command": "/usr/bin/c++  -I/opt/homebrew/Cellar/assimp/6.0.2/include -F/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks -isystem /opt/homebrew/include -std=gnu++17 -arch arm64 -o CMakeFiles/RacingGame.dir/src/materialMesh.cpp.o -c /Users/artem/Desktop/engine_test/Engine/src/materialMesh.cpp",
+  "file": "/Users/artem/Desktop/engine_test/Engine/src/materialMesh.cpp",
+  "output": "CMakeFiles/RacingGame.dir/src/materialMesh.cpp.o"
+},
+{
+  "directory": "/Users/artem/Desktop/engine_test/Engine/build",
+  "command": "/usr/bin/c++  -I/opt/homebrew/Cellar/assimp/6.0.2/include -F/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks -isystem /opt/homebrew/include -std=gnu++17 -arch arm64 -o CMakeFiles/RacingGame.dir/src/grid.cpp.o -c /Users/artem/Desktop/engine_test/Engine/src/grid.cpp",
+  "file": "/Users/artem/Desktop/engine_test/Engine/src/grid.cpp",
+  "output": "CMakeFiles/RacingGame.dir/src/grid.cpp.o"
+},
+{
+  "directory": "/Users/artem/Desktop/engine_test/Engine/build",
+  "command": "/usr/bin/c++  -I/opt/homebrew/Cellar/assimp/6.0.2/include -F/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks -isystem /opt/homebrew/include -std=gnu++17 -arch arm64 -o CMakeFiles/RacingGame.dir/src/texture.cpp.o -c /Users/artem/Desktop/engine_test/Engine/src/texture.cpp",
+  "file": "/Users/artem/Desktop/engine_test/Engine/src/texture.cpp",
+  "output": "CMakeFiles/RacingGame.dir/src/texture.cpp.o"
+},
+{
+  "directory": "/Users/artem/Desktop/engine_test/Engine/build",
+  "command": "/usr/bin/c++  -I/opt/homebrew/Cellar/assimp/6.0.2/include -F/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks -isystem /opt/homebrew/include -std=gnu++17 -arch arm64 -o CMakeFiles/RacingGame.dir/src/rotatedCube.cpp.o -c /Users/artem/Desktop/engine_test/Engine/src/rotatedCube.cpp",
+  "file": "/Users/artem/Desktop/engine_test/Engine/src/rotatedCube.cpp",
+  "output": "CMakeFiles/RacingGame.dir/src/rotatedCube.cpp.o"
+},
+{
+  "directory": "/Users/artem/Desktop/engine_test/Engine/build",
+  "command": "/usr/bin/c++  -I/opt/homebrew/Cellar/assimp/6.0.2/include -F/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks -isystem /opt/homebrew/include -std=gnu++17 -arch arm64 -o CMakeFiles/RacingGame.dir/src/texturedCube.cpp.o -c /Users/artem/Desktop/engine_test/Engine/src/texturedCube.cpp",
+  "file": "/Users/artem/Desktop/engine_test/Engine/src/texturedCube.cpp",
+  "output": "CMakeFiles/RacingGame.dir/src/texturedCube.cpp.o"
+},
+{
+  "directory": "/Users/artem/Desktop/engine_test/Engine/build",
+  "command": "/usr/bin/c++  -I/opt/homebrew/Cellar/assimp/6.0.2/include -F/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks -isystem /opt/homebrew/include -std=gnu++17 -arch arm64 -o CMakeFiles/RacingGame.dir/src/model.cpp.o -c /Users/artem/Desktop/engine_test/Engine/src/model.cpp",
+  "file": "/Users/artem/Desktop/engine_test/Engine/src/model.cpp",
+  "output": "CMakeFiles/RacingGame.dir/src/model.cpp.o"
+}
+]

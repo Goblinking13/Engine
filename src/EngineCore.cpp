@@ -12,6 +12,7 @@
 #include "rotatedCube.h"
 #include "texturedCube.h"
 #include "model.h"
+#include "raycaster.h"
 
 
 EngineCore::EngineCore() {
@@ -40,17 +41,24 @@ void EngineCore::gameLoop() {
   const float zNear = 0.01f;
   const float zFar = 1000.0f;
 
-  game::shader basicPhongShader("../shader/basicPhongVertex.vs","../shader/basicPhongFragment.fs" );
+  game::shader basicPhongShader("../shader/basicPhongVertex.vert","../shader/basicPhongFragment.frag" );
   basicPhongShader.setPerspective(fov, aspect, zNear, zFar);
 
-  game::shader textureShader("../shader/textureVertex.vs","../shader/textureFragment.fs");
+  game::shader textureShader("../shader/textureVertex.vert","../shader/textureFragment.frag");
   textureShader.setPerspective(fov, aspect, zNear, zFar);
 
-  game::shader textureBasicShader("../shader/textureBasicVertex.vs","../shader/textureBasicFragment.fs");
+  game::shader textureBasicShader("../shader/textureBasicVertex.vert","../shader/textureBasicFragment.frag");
   textureBasicShader.setPerspective(fov, aspect, zNear, zFar);
 
-  game::shader basicShader("../shader/basicVertex.vs", "../shader/basicFragment.fs");
+  game::shader basicShader("../shader/basicVertex.vert", "../shader/basicFragment.frag");
   basicShader.setPerspective(fov, aspect, zNear, zFar);
+
+  game::shader rayCasterShader("../shader/raycasterVertex.vert","../shader/raycasterGeometry.geom", "../shader/raycasterFragment.frag");
+  // game::shader rayCasterShader("../shader/raycasterVertex.vert", "../shader/raycasterFragment.frag");
+
+  rayCasterShader.setPerspective(fov, aspect, zNear, zFar);
+
+
 
   // float x = 1920.0f/1280.0f;
   // std::cout << x << std::endl;
@@ -66,6 +74,8 @@ void EngineCore::gameLoop() {
   cameraObject.addActiveShader(&textureShader);
   cameraObject.addActiveShader(&textureBasicShader);
   cameraObject.addActiveShader(&basicShader);
+  cameraObject.addActiveShader(&rayCasterShader);
+
 
   addCamera(&cameraObject);
 
@@ -75,12 +85,20 @@ void EngineCore::gameLoop() {
   std::unique_ptr<game::object> simpleCube = std::make_unique<game::model::rotatedCube>(&basicPhongShader);
   // std::unique_ptr<game::object> simpleGrid = std::make_unique<game::model::grid>(20,20,&basicPhongShader);
   std::unique_ptr<game::object> simpleGrid = std::make_unique<game::model::grid>(15,15,&basicPhongShader);
-  std::unique_ptr<game::object> boxCube = std::make_unique<game::model::texturedCube>(&textureShader,"../resources/textures/box.jpg");
-  std::unique_ptr<game::object> boxCube1 = std::make_unique<game::model::texturedCube>(&textureShader,"../resources/textures/box.jpg");
-  std::unique_ptr<game::object> boxCube2 = std::make_unique<game::model::texturedCube>(&textureShader,"../resources/textures/box.jpg");
+  // std::unique_ptr<game::object> boxCube = std::make_unique<game::model::texturedCube>(&textureShader,"../resources/textures/box.jpg");
+  // std::unique_ptr<game::object> boxCube1 = std::make_unique<game::model::texturedCube>(&textureShader,"../resources/textures/box.jpg");
+  // std::unique_ptr<game::object> boxCube2 = std::make_unique<game::model::texturedCube>(&textureShader,"../resources/textures/box.jpg");
 
-  addObject(boxCube1.get());
-  addObject(boxCube2.get());
+
+  game::model::texturedCube boxCube(&textureShader,"../resources/textures/box.jpg");
+  game::model::texturedCube boxCube1(&textureShader,"../resources/textures/box.jpg");
+  game::model::texturedCube boxCube2(&textureShader,"../resources/textures/box.jpg");
+
+  // addObject(&boxCube);
+  game::raycaster raycasterCube(&boxCube, &rayCasterShader);
+  addObject(&raycasterCube);
+  boxCube.setPosition({-5,5,-2});
+  boxCube.setScale(glm::vec3(3,3,3));
 
   addObject(simpleGrid.get());
   (static_cast<game::materialMesh*>(simpleCube.get()))->setColor({1.0f, 0.0f, 0.0f});
@@ -93,7 +111,7 @@ void EngineCore::gameLoop() {
 
 
   addObject(simpleCube.get());
-  addObject(boxCube.get());
+  // addObject(&boxCube);
 
 
   // addObject(&sphere2);
@@ -103,9 +121,10 @@ void EngineCore::gameLoop() {
 
   std::cout << "ALL OBJECT ADDED\n";
 
-  boxCube1.get()->setPosition({-3.75,0.5,-2});
-  boxCube2.get()->setPosition({-4.25,1.5,-2});
-  boxCube.get()->setPosition({-5,0.5,-2});
+  boxCube1.setPosition({-3.75,0.5,-2});
+  boxCube2.setPosition({-4.25,1.5,-2});
+  // boxCube.setPosition({-5,5,-2});
+  // boxCube.setScale(glm::vec3(3,3,3));
 
 
   glEnable(GL_DEPTH_TEST);
@@ -155,6 +174,10 @@ void EngineCore::gameLoop() {
 
   double count = 0;
   // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
+
+
+
   while (!glfwWindowShouldClose(gameWindow_->getWindow())) {
     processInput();
     calculateFPS();
@@ -165,6 +188,7 @@ void EngineCore::gameLoop() {
 
      glClearColor( 199/255.0f, 96/255.0f, 18/255.0f, 1.0f);
     //glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
+
 
 
     updateObjects();
