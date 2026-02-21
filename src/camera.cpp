@@ -26,6 +26,7 @@ void game::camera::updateMovable(float dt) {
     for (const auto& shader : activeShaders) {
         shader->loadUniformMat4(view_, "view");
         shader->loadUniformVec3(position, "viewPos");
+        shader->loadUniformVec3(cameraFront_, "viewDir");
     }
 
 }
