@@ -97,7 +97,7 @@ void EngineCore::gameLoop() {
 
   // addObject(&boxCube);
   // careful at most vexing parse VVV
-  game::raycaster sceneRaycaster{&basicShader};
+  game::raycaster sceneRaycaster{&rayCasterShader};
   addObject(&sceneRaycaster);
   boxCube.setPosition({-5,5,-2});
   boxCube.setScale(glm::vec3(3,3,3));
@@ -134,10 +134,10 @@ void EngineCore::gameLoop() {
   glEnable(GL_DEPTH_TEST);
 
 
-  game::pointCloud pc(&rayCasterShader, 10000);
-  addObject(&pc);
-
-  pc.addPoint({0,1,0});
+  // game::pointCloud pc(&rayCasterShader, 10000);
+  // addObject(&pc);
+  //
+  // pc.addPoint({0,1,0});
 
 
 

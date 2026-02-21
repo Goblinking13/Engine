@@ -1,6 +1,7 @@
 #pragma once
 #include "camera.h"
 #include "materialMesh.h"
+#include "pointCloud.h"
 
 // better with ECS
 namespace game {
@@ -10,6 +11,8 @@ namespace game {
         //detected after raycast points
         std::vector<materialMesh*>* points_;
         camera* camera_;
+        std::unique_ptr<pointCloud>  pointCloud_;
+        float accumulatedTime;
 
 
         public:
