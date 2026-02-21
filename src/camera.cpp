@@ -105,7 +105,7 @@ void game::camera::setActiveWindow(GLFWwindow* window) {
 
 
 void game::camera::update(const float dt) {
-    std::cout << "camera update " << std::endl;
+    // std::cout << "camera update " << std::endl;
     updateMovable(dt);
 }
 
@@ -116,5 +116,10 @@ void game::camera::addActiveShader(shader *shader) {
 
 game::camera::~camera() {
 
+}
+
+
+glm::vec3 game::camera::getCameraDirection() {
+    return cameraFront_;
 }
 

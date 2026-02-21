@@ -40,7 +40,7 @@ set(MY_HEADER_FILES
         src/texturedCube.h
         src/model.h
         src/raycaster.h
-
+        src/pointCloud.h
 
 )
 
@@ -63,6 +63,7 @@ set(MY_SOURCE_FILES
         src/texturedCube.cpp
         src/model.cpp
         src/raycaster.cpp
+        src/pointCloud.cpp
 
 )
 

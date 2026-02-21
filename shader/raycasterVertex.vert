@@ -10,7 +10,6 @@ uniform mat4 projection;
 out vec3 vWorldPos;
 
 void main() {
-    vec4 wp = model * vec4(vPos, 1.0);
-    vWorldPos = wp.xyz;
-    gl_Position = projection * view * wp;
+    gl_Position =  projection  *view*model *vec4(vPos,1.0f);
+    gl_PointSize = 15.0f;
 }

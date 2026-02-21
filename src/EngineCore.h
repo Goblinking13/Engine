@@ -9,6 +9,8 @@
 #include <GLFW/glfw3.h>
 #include "camera.h"
 #include <vector>
+
+#include "materialMesh.h"
 #include "movable.h"
 
 
@@ -23,6 +25,8 @@ class EngineCore {
 
      // std::vector<game::movable*> gameMovables;
      std::vector<game::object*> gameObjects;
+     std::vector<game::materialMesh*> materialMeshes;
+     game::camera* camera_;
 
      float frames = 0.0f;
      float lastTime = 0.0f;

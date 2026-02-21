@@ -1,16 +1,22 @@
 #pragma once
+#include "camera.h"
 #include "materialMesh.h"
 
-// need ECS
+// better with ECS
 namespace game {
     class raycaster : public materialMesh{
 
-        materialMesh *mesh_;
-        shader *rayShader_;
-        shader *basicShader_;
+        std::vector<materialMesh*>* meshes_;
+        //detected after raycast points
+        std::vector<materialMesh*>* points_;
+        camera* camera_;
+
 
         public:
-        explicit raycaster(materialMesh *mesh, shader *shader);
+        void setSceneMesh(std::vector<materialMesh*>* mesh) { meshes_ = mesh; }
+        void setActiveCamera(camera* camera) { camera_ = camera; }
+
+        explicit raycaster(shader* shader);
         void render() override;
         void update(float dt);
 

@@ -42,6 +42,7 @@ namespace game{
         void getMouseInput() override;
         void setActiveWindow(GLFWwindow* window);
         void addActiveShader(shader* shader);
+        glm::vec3 getCameraDirection();
 
     };
 
