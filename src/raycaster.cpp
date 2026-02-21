@@ -46,14 +46,14 @@ namespace game {
                     float t, u, v;
                     if (castRay(rayDir, rayOrig, aW, bW, cW, t, u, v, 1e-6f)) {
 
-                        // glm::vec3 n = glm::normalize(glm::cross(bW - aW, cW - aW));
-                        //
-                        //
-                        // if (glm::dot(n, rayDir) > 0.0f) n = -n;
-                        //
-                        // const float bias = 0.15f;
+                        glm::vec3 n = glm::normalize(glm::cross(bW - aW, cW - aW));
+
+
+                        if (glm::dot(n, rayDir) > 0.0f) n = -n;
+
+                        const float bias = 0.015f;
                         glm::vec3 hit = rayOrig + rayDir * t;
-                        // hit += n * bias;
+                        hit += n * bias;
                         pointCloud_->addPoint(hit);
 
                     }
@@ -65,29 +65,6 @@ namespace game {
     };
 
     bool raycaster::castRay(glm::vec3 &dir, glm::vec3 &orig, glm::vec3 &v0, glm::vec3 &v1, glm::vec3 &v2,float &t, float &u, float &v,float eps ) {
-
-        // glm::vec3 v1v0 = v1 - v0;
-        // glm::vec3 v2v0 = v2 - v0;
-        //
-        // glm::vec3 T = pos - v0;
-        // glm::vec3 P = glm::cross(v1v0, v2v0);
-        // glm::vec3 N = glm::cross(dir, T);
-        //
-        // float det = glm::dot(dir, P);
-        //
-        //
-        // if (det < eps) return false;
-        //
-        // float inv = 1.0f / det;
-        //
-        // u = glm::dot( v1v0 , N) * inv;
-        // if (u < 0 || u > 1) return false;
-        //
-        // v = glm::dot(v2v0 , N) * inv;
-        // if (v < 0 || u + v > 1) return false;
-        //
-        // t = glm::dot(T, P) * inv;
-
 
         glm::vec3 e1 = v1 - v0;
         glm::vec3 e2 = v2 - v0;
