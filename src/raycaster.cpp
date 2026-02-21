@@ -58,7 +58,7 @@ void raycaster::render() {
         mesh_->setShader(basicShader_);
         mesh_->render();
 
-        // круг-проход
+
         glEnable(GL_POLYGON_OFFSET_FILL);
         glPolygonOffset(-1.0f, -1.0f);   // подтолкнуть ближе к камере (значения можно подбирать)
 
