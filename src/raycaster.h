@@ -2,17 +2,18 @@
 #include "camera.h"
 #include "materialMesh.h"
 #include "pointCloud.h"
+#include <random>
 
 // better with ECS
 namespace game {
-    class raycaster : public materialMesh{
-
+    class raycaster : public materialMesh {
         std::vector<materialMesh*>* meshes_;
         //detected after raycast points
         std::vector<materialMesh*>* points_;
         camera* camera_;
         std::unique_ptr<pointCloud>  pointCloud_;
-        float accumulatedTime;
+        float accumulatedTime_;
+        std::mt19937 rng_{std::random_device{}()};
 
         bool castRay(glm::vec3 &dir, glm::vec3 &pos, glm::vec3 &v0, glm::vec3 &v1, glm::vec3 &v2,
             float &t, float &u, float &v,float eps = 0.001);

@@ -1,4 +1,6 @@
 #include "raycaster.h"
+#include <glm/gtc/matrix_transform.hpp>
+
 #include <iostream>
 
 
@@ -19,28 +21,63 @@ namespace game {
     }
 
     void raycaster::update(float dt) {
-        accumulatedTime += dt;
+        accumulatedTime_ += dt;
         // int step = 10;
 
-        if(accumulatedTime >= 1) {
+        if(accumulatedTime_ >= 1) {
             glm::vec3 rayOrig = camera_->getPosition();
             glm::vec3 rayDir  = camera_->getCameraDirection();
             rayDir = glm::normalize(rayDir);
 
-            int pointCount= 10;
-            float fov = 90;
+            int pointCount= 20;
+            float step = 2;
 
+            glm::vec3 forward = glm::normalize(camera_->getCameraDirection());
+            glm::vec3 worldUp(0,1,0);
 
+            glm::vec3 right = glm::normalize(glm::cross(forward, worldUp));
+            glm::vec3 up    = glm::normalize(glm::cross(right, forward));
 
             std::vector<glm::vec3> points;
 
+            float yawAngle = 10;
+            float pitchAngle = 45;
+
+            std::uniform_real_distribution<float> yawDist(-yawAngle, yawAngle);
+            std::uniform_real_distribution<float> pitchDist(-pitchAngle, pitchAngle);
+
+
+
             for(int i = 0; i < pointCount; i++) {
 
-                glm::mat4 rot = glm::rotate(glm::mat4(1.0f),
-                                            glm::radians(-fov/2 + fov/pointCount * i ),
-                                            glm::vec3(1, 0, 0));
 
-                glm::vec3 nRayDir = glm::vec3(rot * glm::vec4(rayDir, 1.0f));
+                // float angleRad = glm::radians(-step * pointCount/2 + step * i );
+                //
+                // glm::mat4 rot = glm::rotate(glm::mat4(1.0f), angleRad, up);
+                // glm::vec3 nRayDir = glm::vec3(rot * glm::vec4(forward, 0.0f));
+                //
+                // rot = glm::rotate(glm::mat4(1.0f), angleRad, right);
+                // nRayDir = glm::vec3(rot * glm::vec4(forward, 0.0f));
+
+                // float yaw = angleDist(rng_);
+                // float pitch = angleDist(rng_);
+
+
+                float yaw   = glm::radians(yawDist(rng_));
+                float pitch = glm::radians(pitchDist(rng_));
+
+                // 1) yaw вокруг up
+                glm::mat4 R_yaw = glm::rotate(glm::mat4(1.0f), yaw, up);
+                glm::vec3 d1 = glm::vec3(R_yaw * glm::vec4(forward, 0.0f));
+
+                // 2) после yaw пересчитай right (чтобы pitch был “перпендикулярен” новому forward)
+                glm::vec3 right2 = glm::normalize(glm::cross(d1, up));
+
+                // 3) pitch вокруг right2
+                glm::mat4 R_pitch = glm::rotate(glm::mat4(1.0f), pitch, right2);
+                glm::vec3 nRayDir = glm::normalize(glm::vec3(R_pitch * glm::vec4(d1, 0.0f)));
+
+
 
                 for (auto& obj : *meshes_) {
                     glm::mat4 model = obj->getModelMatrix();
