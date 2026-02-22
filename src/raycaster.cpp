@@ -90,6 +90,9 @@ namespace game {
                 glm::mat4 R_pitch = glm::rotate(glm::mat4(1.0f), pitch, right2);
                 glm::vec3 nRayDir = glm::normalize(glm::vec3(R_pitch * glm::vec4(d1, 0.0f)));
 
+                float bestT = maxDist_;
+                bool isHit = false;
+                glm::vec3 bestN;
 
 
                 for (auto& obj : *meshes_) {
@@ -102,6 +105,7 @@ namespace game {
                     }else {
                         model = obj->getModelMatrix();
                     }
+
 
 
                     for (int k = 0; k + 2 < (int)obj->indices_.size(); k += 3) {
@@ -118,23 +122,35 @@ namespace game {
                         glm::vec3 cW = glm::vec3(model * glm::vec4(cL, 1.0f));
 
                         float t, u, v;
-                        if (castRay(nRayDir, rayOrig, aW, bW, cW, t, u, v, 1e-6f)) {
+
+                        if (castRay(nRayDir, rayOrig, aW, bW, cW, t, u, v, 1e-6f) && t < bestT && t > 0.0f) {
 
                             glm::vec3 n = glm::normalize(glm::cross(bW - aW, cW - aW));
-
-
                             if (glm::dot(n, nRayDir) > 0.0f) n = -n;
 
-                            const float bias = 0.015f;
-                            glm::vec3 hit = rayOrig + nRayDir * t;
-                            hit += n * bias;
+                            isHit = true;
+                            bestT = t;
+                            bestN = n;
+
+                            // const float bias = 0.015f;
+                            // glm::vec3 hit = rayOrig + nRayDir * t;
+                            // hit += n * bias;
                             // pointCloud_->addPoint(hit);
 
-                            if(glm::length(rayOrig - hit) <= maxDist)
-                            points.push_back(hit);
+                            // if(glm::length(rayOrig - hit) <= maxDist_)
+                            // points.push_back(hit);
 
                         }
                     }
+
+                    if(bestT < maxDist_) {
+                        glm::vec3 hit = rayOrig + nRayDir * bestT;
+                        const float bias = 0.015f;
+                        hit += bestN * bias;
+                        points.push_back(hit);
+                    }
+
+
                 }
 
             }
