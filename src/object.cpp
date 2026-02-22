@@ -110,6 +110,11 @@ glm::mat4 game::object::getModelMatrix(){
 
 }
 
+void game::object::setModelMatrix(const glm::mat4& model){
+    model_ = model;
+
+}
+
 
 void game::object::setRotation(const glm::quat &rotation) {
     rotation_ = rotation;

@@ -60,6 +60,13 @@ void EngineCore::gameLoop() {
   rayCasterShader.setPerspective(fov, aspect, zNear, zFar);
 
 
+  game::model::Model teapot("/Users/artem/Desktop/utah_teapot.obj");
+  teapot.setShader(&textureBasicShader);
+  addObject(&teapot);
+  teapot.setPosition(glm::vec3(0, 5, 0));
+  teapot.setRotation(glm::vec3(90, 00, 0));
+
+
 
   // float x = 1920.0f/1280.0f;
   // std::cout << x << std::endl;
@@ -228,10 +235,21 @@ void EngineCore::addObject(game::object *object) {
     materialMeshes.push_back(m);
   }
 
+  if(auto* m = dynamic_cast<game::model::Model*>(object)) {
+
+    for(auto& ms : m->meshes_) {
+      ms->setOwner(m);
+      materialMeshes.push_back(ms);
+
+    }
+
+  }
+
   if(auto* m = dynamic_cast<game::raycaster*>(object)) {
     m->setSceneMesh(&materialMeshes);
     m->setActiveCamera(camera_);
   }
+
 
 
 

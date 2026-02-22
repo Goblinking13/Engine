@@ -53,7 +53,7 @@ namespace game {
         glm::vec3 getScale() const;
         glm::quat getRotation() const;
         glm::mat4 getModelMatrix();
-        void setModelMatrix(const glm::mat4& model) const;
+        void setModelMatrix(const glm::mat4& model);
 
 
 

@@ -80,7 +80,16 @@ namespace game {
 
 
                 for (auto& obj : *meshes_) {
-                    glm::mat4 model = obj->getModelMatrix();
+
+                    glm::mat4 model;
+                    // model = obj->getModelMatrix();
+                    if(obj->getOwner() != nullptr) {
+                        auto* tmp = obj->getOwner();
+                        model = tmp->getModelMatrix();
+                    }else {
+                        model = obj->getModelMatrix();
+                    }
+
 
                     for (int k = 0; k + 2 < (int)obj->indices_.size(); k += 3) {
                         int i0 = obj->indices_[k];
