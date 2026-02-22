@@ -9,7 +9,8 @@ uniform float baseSize = 60.0f;
 uniform float sizeScale = 1.0f;
 
 void main() {
-    vec4 viewPos = view * model * vec4(vPos, 1.0);
+//model *
+    vec4 viewPos = view * vec4(vPos, 1.0);
 
     gl_Position = projection * viewPos;
 

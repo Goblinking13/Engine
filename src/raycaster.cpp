@@ -14,7 +14,16 @@ namespace game {
 
     void raycaster::render() {
 
+        // glEnable(GL_DEPTH_TEST);
+        // glDepthFunc(GL_LEQUAL);
+        //
+        // // и перед рисованием точек:
+        // glDepthMask(GL_FALSE); // не пишем в depth
+        // draw points
         pointCloud_->render();
+        // glDepthMask(GL_TRUE);
+
+
         //
         // std::cout << "viewPos = " << camera_->getPosition().x << ";"<< camera_->getPosition().y << ";"<< camera_->getPosition().z  << std::endl;
         // std::cout << "viewDir = " << camera_->getCameraDirection().x << ";"<< camera_->getCameraDirection().y << ";"<< camera_->getCameraDirection().z  << std::endl;
@@ -24,7 +33,8 @@ namespace game {
         accumulatedTime_ += dt;
         // int step = 10;
 
-        if(accumulatedTime_ >= 1) {
+        if(accumulatedTime_ >= 0.01) {
+            accumulatedTime_ = 0;
             glm::vec3 rayOrig = camera_->getPosition();
             glm::vec3 rayDir  = camera_->getCameraDirection();
             rayDir = glm::normalize(rayDir);
@@ -65,6 +75,9 @@ namespace game {
 
                 float yaw   = glm::radians(yawDist(rng_));
                 float pitch = glm::radians(pitchDist(rng_));
+
+                // float yaw   = glm::radians(1.0f);
+                // float pitch = glm::radians(1.0f);
 
                 // 1) yaw вокруг up
                 glm::mat4 R_yaw = glm::rotate(glm::mat4(1.0f), yaw, up);

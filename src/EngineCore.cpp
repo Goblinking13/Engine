@@ -61,7 +61,7 @@ void EngineCore::gameLoop() {
 
 
   game::model::Model teapot("/Users/artem/Desktop/utah_teapot.obj");
-  teapot.setShader(&textureBasicShader);
+  teapot.setShader(&basicShader);
   addObject(&teapot);
   teapot.setPosition(glm::vec3(0, 5, 0));
   teapot.setRotation(glm::vec3(90, 00, 0));
