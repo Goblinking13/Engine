@@ -278,6 +278,7 @@ void game::shader::loadUniformVec3(const glm::vec3& vector, const std::string& u
 }
 
 void game::shader::setPerspective(float fov, float aspect, float zNear, float zFar) {
+    use();
     glm::mat4 projection = glm::perspective(fov, aspect, zNear, zFar);
     loadUniformMat4(projection, "projection");
 }

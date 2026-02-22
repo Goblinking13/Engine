@@ -6,7 +6,7 @@
 
 namespace game {
 
-    raycaster::raycaster(shader* shader) : pointCloud_(std::make_unique<pointCloud>(shader, 50000))
+    raycaster::raycaster(shader* shader) : pointCloud_(std::make_unique<pointCloud>(shader, 500000))
     {
 
 
@@ -20,7 +20,9 @@ namespace game {
         // // и перед рисованием точек:
         // glDepthMask(GL_FALSE); // не пишем в depth
         // draw points
+        // glDisable(GL_DEPTH_TEST);
         pointCloud_->render();
+        // glEnable(GL_DEPTH_TEST);
         // glDepthMask(GL_TRUE);
 
 
@@ -33,7 +35,7 @@ namespace game {
         accumulatedTime_ += dt;
         // int step = 10;
 
-        if(accumulatedTime_ >= 0.01) {
+        if(accumulatedTime_ >= 0.1) {
             accumulatedTime_ = 0;
             glm::vec3 rayOrig = camera_->getPosition();
             glm::vec3 rayDir  = camera_->getCameraDirection();

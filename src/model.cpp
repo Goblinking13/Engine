@@ -131,6 +131,7 @@ void game::model::Model::render() {
     for (int i = 0; i < meshes_.size(); i++) {
 
         meshes_[i]->setShader(shader_);
+        // meshes_[i]->render();
         meshes_[i]->renderWithoutUniform();
 
         }

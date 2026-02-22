@@ -15,7 +15,7 @@ namespace game {
 
             void updateMovable(float dt) override{
 
-                rotate({1,1,1}, dt);
+                rotateRadian({1,1,1}, dt);
                 // period += dt;
 
                 // setPosition( glm::vec3(0,sin(period)/10,0));

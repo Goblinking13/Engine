@@ -121,7 +121,7 @@ glm::vec3 game::materialMesh::getColor() const {
 }
 
 void game::materialMesh::renderWithoutUniform() {
-
+    shader_->use();
 
     shader_->loadUniformVec3(color_, "vColor");
 

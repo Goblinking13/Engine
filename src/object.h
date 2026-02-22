@@ -46,6 +46,8 @@ namespace game {
         void setRotation(const glm::vec3& rotation);
         void setRotation(const glm::quat& rotation);
         void rotate(const glm::vec3& axis, float angle);
+        void rotateRadian(const glm::vec3& axis, float angle);
+
 
 
 

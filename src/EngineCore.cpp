@@ -61,10 +61,15 @@ void EngineCore::gameLoop() {
 
 
   game::model::Model teapot("/Users/artem/Desktop/utah_teapot.obj");
-  teapot.setShader(&basicShader);
+  teapot.setShader(&basicPhongShader);
   addObject(&teapot);
-  teapot.setPosition(glm::vec3(0, 5, 0));
-  teapot.setRotation(glm::vec3(90, 00, 0));
+  teapot.setColor({173.0f/255.0f, 10.0f/255.0f, 10.0f/255.0f});
+  teapot.setPosition(glm::vec3(0, 3, -7));
+  teapot.rotate({1,0,0},-90.0f);
+
+
+// problem with loaded models
+
 
 
 
@@ -84,7 +89,6 @@ void EngineCore::gameLoop() {
   cameraObject.addActiveShader(&basicShader);
   cameraObject.addActiveShader(&rayCasterShader);
 
-
   addCamera(&cameraObject);
 
   cameraObject.setPosition(glm::vec3(-2.0f, 0.0f, 0.0f));
@@ -102,7 +106,14 @@ void EngineCore::gameLoop() {
   game::model::texturedCube boxCube1(&textureShader,"../resources/textures/box.jpg");
   game::model::texturedCube boxCube2(&textureShader,"../resources/textures/box.jpg");
 
-  // addObject(&boxCube);
+  // IF OBJECT IS ADD BEFORE CAMERA THER CAN BE PROBLEMS WITH VIEW MATRIX
+  // game::model::Model loadedCube("/Users/artem/Desktop/cube.obj");
+  // loadedCube.setShader(&textureBasicShader);
+  // addObject(&loadedCube);
+  // teapot.setPosition(glm::vec3(-5, 5, 0));
+  // teapot.setRotation(glm::vec3(90, 00, 0));
+
+  addObject(&boxCube);
   // careful at most vexing parse VVV
   game::raycaster sceneRaycaster{&rayCasterShader};
   addObject(&sceneRaycaster);
@@ -156,7 +167,7 @@ void EngineCore::gameLoop() {
     deltaTime_ = currentTime_ - lastTime_;
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-     glClearColor( 199/255.0f, 96/255.0f, 18/255.0f, 1.0f);
+     glClearColor( 8/255.0f, 158/255.0f, 204/255.0f, 1.0f);
     //glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
 
 
@@ -208,8 +219,12 @@ void EngineCore::updateObjects() {
 
   for (auto movableActor : gameObjects) {
     movableActor->update(deltaTime_);
+  }
+
+  for (auto movableActor : gameObjects) {
     movableActor->render();
   }
+
 
 }
 

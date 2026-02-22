@@ -85,8 +85,16 @@ void game::object::setRotation(const glm::vec3& rotation) {
     dirty_ = true;
 }
 
-void game::object::rotate(const glm::vec3& axis, float angle) {
+
+
+void game::object::rotateRadian(const glm::vec3& axis, float angle) {
     const glm::quat q = glm::angleAxis(angle, axis);
+    rotation_ = glm::normalize(q * rotation_);
+    dirty_ = true;
+}
+
+void game::object::rotate(const glm::vec3& axis, float angle) {
+    const glm::quat q = glm::angleAxis(glm::radians(angle), axis);
     rotation_ = glm::normalize(q * rotation_);
     dirty_ = true;
 }
