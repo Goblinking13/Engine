@@ -68,6 +68,14 @@ void EngineCore::gameLoop() {
   teapot.rotate({1,0,0},-90.0f);
 
 
+  // game::model::Model text("/Users/artem/Desktop/text.obj");
+  // text.setShader(&basicPhongShader);
+  // addObject(&text);
+  // text.setColor({173.0f/255.0f, 150.0f/255.0f, 10.0f/255.0f});
+  // text.setPosition(glm::vec3(0, 0, 0));
+  // text.rotate({1,0,0},-90.0f);
+
+
 // problem with loaded models
 
 

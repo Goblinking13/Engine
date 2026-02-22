@@ -156,9 +156,12 @@ namespace game {
                 }
 
             }
+            // frameCount_++;
+            // if(frameCount_ >= 5) {
+                pointCloud_->addPoints(points);
+                // frameCount_ = 0;
+            // }
 
-
-            pointCloud_->addPoints(points);
 
 
         }

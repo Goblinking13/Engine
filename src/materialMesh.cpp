@@ -21,11 +21,19 @@ void game::materialMesh::render() {
 
 
     shader_->use();
-    auto tmp = getModelMatrix();
-    glm::mat4 inverseMatrix = glm::inverse(getModelMatrix());
-    shader_->loadUniformMat4(inverseMatrix, "inverseModel");
-    shader_->loadUniformMat4(getModelMatrix(), "model");
-    shader_->loadUniformVec3(color_, "vColor");
+
+
+        auto tmp = getModelMatrix();
+        glm::mat4 inverseMatrix = glm::inverse(getModelMatrix());
+
+        shader_->loadUniformMat4(inverseMatrix, "inverseModel");
+
+        shader_->loadUniformMat4(getModelMatrix(), "model");
+
+    // if(colorDirty_) {
+        shader_->loadUniformVec3(color_, "vColor");
+        // colorDirty_ = false;
+    // }
 
 
     unsigned int diffuseNr = 1;
@@ -82,6 +90,7 @@ void game::materialMesh::addTexture(texture texture) {
 
 
 void game::materialMesh::setColor(glm::vec3 color) {
+    // colorDirty_ = true;
     color_ = color;
 
 }
@@ -117,13 +126,20 @@ game::materialMesh& game::materialMesh::operator=(const materialMesh& other) {
 
 
 glm::vec3 game::materialMesh::getColor() const {
+
+
+
     return color_;
 }
 
 void game::materialMesh::renderWithoutUniform() {
     shader_->use();
 
-    shader_->loadUniformVec3(color_, "vColor");
+    // if(colorDirty_) {
+        shader_->loadUniformVec3(color_, "vColor");
+    //     colorDirty_ = false;
+    // }
+
 
     unsigned int diffuseNr = 1;
     unsigned int specularNr = 1;

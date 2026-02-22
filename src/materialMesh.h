@@ -13,6 +13,7 @@ namespace game{
         std::vector<texture> textures_;
         glm::vec3 color_ = glm::vec3(1.0f);
         game::object* owner_ = nullptr;
+        // bool colorDirty_ = false;
 
         public:
 
