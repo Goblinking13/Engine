@@ -121,7 +121,7 @@ void EngineCore::gameLoop() {
   // teapot.setPosition(glm::vec3(-5, 5, 0));
   // teapot.setRotation(glm::vec3(90, 00, 0));
 
-  addObject(&boxCube);
+  // addObject(&boxCube);
   // careful at most vexing parse VVV
   game::raycaster sceneRaycaster{&rayCasterShader};
   addObject(&sceneRaycaster);
@@ -254,6 +254,11 @@ void EngineCore::calculateFPS() {
 void EngineCore::addObject(game::object *object) {
   gameObjects.push_back(object);
 
+  if(auto* m = dynamic_cast<game::raycaster*>(object)) {
+    m->setSceneMesh(&materialMeshes);
+    m->setActiveCamera(camera_);
+  }
+
   if(auto* m = dynamic_cast<game::materialMesh*>(object)) {
     materialMeshes.push_back(m);
   }
@@ -267,13 +272,5 @@ void EngineCore::addObject(game::object *object) {
     }
 
   }
-
-  if(auto* m = dynamic_cast<game::raycaster*>(object)) {
-    m->setSceneMesh(&materialMeshes);
-    m->setActiveCamera(camera_);
-  }
-
-
-
 
 }

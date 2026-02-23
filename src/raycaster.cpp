@@ -14,28 +14,14 @@ namespace game {
 
     void raycaster::render() {
 
-        // glEnable(GL_DEPTH_TEST);
-        // glDepthFunc(GL_LEQUAL);
-        //
-        // // и перед рисованием точек:
-        // glDepthMask(GL_FALSE); // не пишем в depth
-        // draw points
-        // glDisable(GL_DEPTH_TEST);
         pointCloud_->render();
-        // glEnable(GL_DEPTH_TEST);
-        // glDepthMask(GL_TRUE);
-
-
-        //
-        // std::cout << "viewPos = " << camera_->getPosition().x << ";"<< camera_->getPosition().y << ";"<< camera_->getPosition().z  << std::endl;
-        // std::cout << "viewDir = " << camera_->getCameraDirection().x << ";"<< camera_->getCameraDirection().y << ";"<< camera_->getCameraDirection().z  << std::endl;
-    }
+  }
 
     void raycaster::update(float dt) {
         accumulatedTime_ += dt;
-        // int step = 10;
 
-        if(accumulatedTime_ >= 0.1) {
+
+        if(accumulatedTime_ >= 0.01) {
             accumulatedTime_ = 0;
             glm::vec3 rayOrig = camera_->getPosition();
             glm::vec3 rayDir  = camera_->getCameraDirection();
@@ -62,39 +48,22 @@ namespace game {
 
             for(int i = 0; i < pointCount; i++) {
 
-
-                // float angleRad = glm::radians(-step * pointCount/2 + step * i );
-                //
-                // glm::mat4 rot = glm::rotate(glm::mat4(1.0f), angleRad, up);
-                // glm::vec3 nRayDir = glm::vec3(rot * glm::vec4(forward, 0.0f));
-                //
-                // rot = glm::rotate(glm::mat4(1.0f), angleRad, right);
-                // nRayDir = glm::vec3(rot * glm::vec4(forward, 0.0f));
-
-                // float yaw = angleDist(rng_);
-                // float pitch = angleDist(rng_);
-
-
                 float yaw   = glm::radians(yawDist(rng_));
                 float pitch = glm::radians(pitchDist(rng_));
 
-                // float yaw   = glm::radians(1.0f);
-                // float pitch = glm::radians(1.0f);
 
-                // 1) yaw вокруг up
                 glm::mat4 R_yaw = glm::rotate(glm::mat4(1.0f), yaw, up);
                 glm::vec3 d1 = glm::vec3(R_yaw * glm::vec4(forward, 0.0f));
 
-                // 2) после yaw пересчитай right (чтобы pitch был “перпендикулярен” новому forward)
+
                 glm::vec3 right2 = glm::normalize(glm::cross(d1, up));
 
-                // 3) pitch вокруг right2
+
                 glm::mat4 R_pitch = glm::rotate(glm::mat4(1.0f), pitch, right2);
                 glm::vec3 nRayDir = glm::normalize(glm::vec3(R_pitch * glm::vec4(d1, 0.0f)));
 
-                float bestT = maxDist_;
-                bool isHit = false;
-                glm::vec3 bestN;
+
+
 
 
                 for (auto& obj : *meshes_) {
@@ -108,56 +77,105 @@ namespace game {
                         model = obj->getModelMatrix();
                     }
 
+                    glm::mat4 invModel = glm::inverse(model);
+                    glm::vec3 locOrigin = glm::vec3(invModel * glm::vec4(rayOrig, 1.0f));
+
+                    glm::vec3 locDir = glm::vec3(invModel * glm::vec4(nRayDir, 0.0f));
+                    locDir = glm::normalize(locDir);
+
+                    int pickedIndex = -1;
+                    float bestT = maxDist_;
+                    glm::vec3 bestN;
+                    bool isHit = false;
+
+                    std::stack<int> ids;
+                    ids.push(obj->bvh_->root_);
 
 
-                    for (int k = 0; k + 2 < (int)obj->indices_.size(); k += 3) {
-                        int i0 = obj->indices_[k];
-                        int i1 = obj->indices_[k+1];
-                        int i2 = obj->indices_[k+2];
+                    while(!ids.empty()) {
+                        int cur = ids.top();
+                        ids.pop();
 
-                        glm::vec3 aL = obj->vertices_[i0].position;
-                        glm::vec3 bL = obj->vertices_[i1].position;
-                        glm::vec3 cL = obj->vertices_[i2].position;
+                        const auto& bvh = obj->bvh_;
 
-                        glm::vec3 aW = glm::vec3(model * glm::vec4(aL, 1.0f));
-                        glm::vec3 bW = glm::vec3(model * glm::vec4(bL, 1.0f));
-                        glm::vec3 cW = glm::vec3(model * glm::vec4(cL, 1.0f));
+                        float enterT, exitT;
+                        if(!bvh->nodes_[cur].aabb.rayIntersect(locOrigin,locDir, enterT, exitT))
+                            continue;
 
-                        float t, u, v;
+                        if(bestT < enterT)
+                            continue;
 
-                        if (castRay(nRayDir, rayOrig, aW, bW, cW, t, u, v, 1e-6f) && t < bestT && t > 0.0f) {
 
-                            glm::vec3 n = glm::normalize(glm::cross(bW - aW, cW - aW));
-                            if (glm::dot(n, nRayDir) > 0.0f) n = -n;
 
-                            isHit = true;
-                            bestT = t;
-                            bestN = n;
+                        if(bvh->nodes_[cur].isLeaf) {
+                            pickedIndex = cur;
 
-                            // const float bias = 0.015f;
-                            // glm::vec3 hit = rayOrig + nRayDir * t;
-                            // hit += n * bias;
-                            // pointCloud_->addPoint(hit);
+                            const auto& triangles = obj->bvh_->triangles_;
+                            int start = obj->bvh_->nodes_[pickedIndex].indexTrig;
+                            int count = obj->bvh_->nodes_[pickedIndex].countTrig;
 
-                            // if(glm::length(rayOrig - hit) <= maxDist_)
-                            // points.push_back(hit);
 
+
+
+                            for (int k = start; k < start + count; k++) {
+                                int i0 = triangles[k].i0;
+                                int i1 = triangles[k].i1;
+                                int i2 = triangles[k].i2;
+
+                                glm::vec3& aL = obj->vertices_[i0].position;
+                                glm::vec3& bL = obj->vertices_[i1].position;
+                                glm::vec3& cL = obj->vertices_[i2].position;
+
+
+                                float t, u, v;
+
+                                if (castRay(locDir, locOrigin, aL, bL, cL, t, u, v, 1e-6f) && t <= bestT && t > 0.0f) {
+
+                                    glm::vec3 n = glm::normalize(glm::cross(bL - aL, cL - aL));
+                                    if (glm::dot(n, locDir) > 0.0f) n = -n;
+
+                                    isHit = true;
+                                    bestT = t;
+                                    bestN = n;
+
+                                }
+                            }
+
+
+
+                            continue;
                         }
+
+
+
+                        if(bvh->nodes_[cur].left !=  -1) {
+                                ids.push(bvh->nodes_[cur].left);
+                        }
+
+                        if(bvh->nodes_[cur].right !=  -1) {
+                                ids.push(bvh->nodes_[cur].right);
+                        }
+
+
+
                     }
 
-                    if(bestT < maxDist_) {
-                        glm::vec3 hit = rayOrig + nRayDir * bestT;
+                    if(isHit && bestT < maxDist_) {
                         const float bias = 0.015f;
-                        hit += bestN * bias;
-                        points.push_back(hit);
+
+                        glm::vec3 hitLocal = locOrigin + locDir * bestT;
+                        hitLocal += bestN * bias;
+
+                        glm::vec3 hitWorld = glm::vec3(model * glm::vec4(hitLocal, 1.0f));
+                        points.push_back(hitWorld);
+
                     }
 
 
                 }
 
             }
-            // frameCount_++;
-            // if(frameCount_ >= 5) {
+
                 pointCloud_->addPoints(points);
                 // frameCount_ = 0;
             // }
@@ -167,6 +185,9 @@ namespace game {
         }
 
     };
+
+
+
 
     bool raycaster::castRay(glm::vec3 &dir, glm::vec3 &orig, glm::vec3 &v0, glm::vec3 &v1, glm::vec3 &v2,float &t, float &u, float &v,float eps ) {
 

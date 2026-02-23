@@ -7,7 +7,7 @@
 
 // better with ECS
 namespace game {
-    class raycaster : public materialMesh {
+    class raycaster : public object {
         std::vector<materialMesh*>* meshes_;
         //detected after raycast points
         std::vector<materialMesh*>* points_;
@@ -21,7 +21,6 @@ namespace game {
 
         bool castRay(glm::vec3 &dir, glm::vec3 &pos, glm::vec3 &v0, glm::vec3 &v1, glm::vec3 &v2,
             float &t, float &u, float &v,float eps = 0.001);
-
 
         public:
         void setSceneMesh(std::vector<materialMesh*>* mesh);

@@ -39,19 +39,12 @@ BVH::BVH(game::mesh& mesh, unsigned int maxDepth) : mesh_(mesh) {
 
 void BVH::buildTree(int root, int start, int count, int level){
 
-
-    if (level >= (int)maxDepth_ || count <= leafSize_) {
-        nodes_[root].left = nodes_[root].right = -1;
-        return;
-    }
-
-
     const auto& vertices = mesh_.vertices_;
 
 
-      AABB box;
-      const auto& tri = triangles_;
-      for(int i = start; i < start + count; i++){
+    AABB box;
+    const auto& tri = triangles_;
+    for(int i = start; i < start + count; i++){
 
         glm::vec3 v0 = vertices[tri[i].i0].position;
         glm::vec3 v1 = vertices[tri[i].i1].position;
@@ -60,11 +53,19 @@ void BVH::buildTree(int root, int start, int count, int level){
         box.expand(v0);
         box.expand(v1);
         box.expand(v2);
-      }
+    }
 
     nodes_[root].aabb = box;
     nodes_[root].indexTrig = start;
     nodes_[root].countTrig = count;
+
+
+    if (level >= (int)maxDepth_ || count <= leafSize_) {
+        nodes_[root].left = nodes_[root].right = -1;
+        nodes_[root].isLeaf = true;
+        return;
+    }
+
 
     int axis = nodes_[root].aabb.longestAxis();
 
