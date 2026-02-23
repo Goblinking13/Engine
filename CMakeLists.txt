@@ -41,6 +41,8 @@ set(MY_HEADER_FILES
         src/model.h
         src/raycaster.h
         src/pointCloud.h
+        src/AABB.h
+        src/BVH.h
 
 )
 
@@ -64,6 +66,8 @@ set(MY_SOURCE_FILES
         src/model.cpp
         src/raycaster.cpp
         src/pointCloud.cpp
+        src/AABB.cpp
+        src/BVH.cpp
 
 )
 

@@ -1,6 +1,7 @@
 #pragma once
 #include "object.h"
 #include "renderable.h"
+#include "BVH.h"
 
 namespace game {
 
@@ -14,6 +15,7 @@ namespace game {
     };
 
     class mesh : public object, public renderable {
+        void buildBVH();
       protected:
 
          unsigned int VAO_;
@@ -23,6 +25,9 @@ namespace game {
          bool meshLoaded_;
 
         public:
+            //mesh own bvh
+            std::unique_ptr<BVH> bvh_;
+
             std::vector<Vertex> vertices_;
             std::vector<unsigned int> indices_;
 

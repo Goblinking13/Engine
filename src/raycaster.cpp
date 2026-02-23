@@ -196,5 +196,15 @@ namespace game {
 
     }
 
+    void raycaster::setSceneMesh(std::vector<materialMesh*>* mesh) {
+        meshes_ = mesh;
+        // bvh_ = std::make_unique<BVH>(meshes_,10);
+
+
+
+
+
+    }
+
 
 }

@@ -102,7 +102,7 @@ void EngineCore::gameLoop() {
   cameraObject.setPosition(glm::vec3(-2.0f, 0.0f, 0.0f));
 
 
-  std::unique_ptr<game::object> simpleCube = std::make_unique<game::model::rotatedCube>(&basicPhongShader);
+  // std::unique_ptr<game::object> simpleCube = std::make_unique<game::model::rotatedCube>(&basicPhongShader);
   // std::unique_ptr<game::object> simpleGrid = std::make_unique<game::model::grid>(20,20,&basicPhongShader);
   std::unique_ptr<game::object> simpleGrid = std::make_unique<game::model::grid>(15,15,&basicPhongShader);
   // std::unique_ptr<game::object> boxCube = std::make_unique<game::model::texturedCube>(&textureShader,"../resources/textures/box.jpg");
@@ -131,16 +131,16 @@ void EngineCore::gameLoop() {
 
 
   addObject(simpleGrid.get());
-  (static_cast<game::materialMesh*>(simpleCube.get()))->setColor({1.0f, 0.0f, 0.0f});
-  simpleCube->setScale(glm::vec3(2,2,2));
+  // (static_cast<game::materialMesh*>(simpleCube.get()))->setColor({1.0f, 0.0f, 0.0f});
+  // simpleCube->setScale(glm::vec3(2,2,2));
 
 
 
-  simpleCube->setPosition(glm::vec3(0.0f, 2.0f, 4.0f));
+  // simpleCube->setPosition(glm::vec3(0.0f, 2.0f, 4.0f));
 
 
 
-  addObject(simpleCube.get());
+  // addObject(simpleCube.get());
   // addObject(&boxCube);
 
 

@@ -2,6 +2,7 @@
 #include "camera.h"
 #include "materialMesh.h"
 #include "pointCloud.h"
+#include "BVH.h"
 #include <random>
 
 // better with ECS
@@ -23,7 +24,7 @@ namespace game {
 
 
         public:
-        void setSceneMesh(std::vector<materialMesh*>* mesh) { meshes_ = mesh; }
+        void setSceneMesh(std::vector<materialMesh*>* mesh);
         void setActiveCamera(camera* camera) { camera_ = camera; }
 
         explicit raycaster(shader* shader);
