@@ -1,5 +1,6 @@
 #include "raycaster.h"
 #include <glm/gtc/matrix_transform.hpp>
+#include <chrono>
 
 #include <iostream>
 
@@ -18,6 +19,11 @@ namespace game {
   }
 
     void raycaster::update(float dt) {
+        int trigRayCast = 0;
+        int boxRayCast  =0;
+
+        auto start = std::chrono::high_resolution_clock::now();
+
         accumulatedTime_ += dt;
 
 
@@ -27,7 +33,7 @@ namespace game {
             glm::vec3 rayDir  = camera_->getCameraDirection();
             rayDir = glm::normalize(rayDir);
 
-            int pointCount= 20;
+            int pointCount= 1000;
             float step = 2;
 
             glm::vec3 forward = glm::normalize(camera_->getCameraDirection());
@@ -40,6 +46,12 @@ namespace game {
 
             float yawAngle = 15;
             float pitchAngle = 10;
+
+
+            // float yawAngle =25;
+            // float pitchAngle = 20;
+
+
 
             std::uniform_real_distribution<float> yawDist(-yawAngle, yawAngle);
             std::uniform_real_distribution<float> pitchDist(-pitchAngle, pitchAngle);
@@ -65,9 +77,9 @@ namespace game {
 
 
                 int pickedIndex = -1;
-                float bestT = maxDist_;
-                glm::vec3 bestN;
-                bool isHit = false;
+                float allBestT = maxDist_;
+                bool anyHit = false;
+                glm::vec3 hitWorld;
 
                 for (auto& obj : *meshes_) {
 
@@ -88,6 +100,10 @@ namespace game {
                     glm::vec3 invDir = 1.0f/locDir;
 
 
+                    float bestT = maxDist_;
+                    glm::vec3 bestN;
+                    bool isHit = false;
+
 
                     std::stack<int> ids;
                     ids.push(obj->bvh_->root_);
@@ -100,6 +116,7 @@ namespace game {
                         const auto& bvh = obj->bvh_;
 
                         float enterT, exitT;
+                        boxRayCast++;
                         if(!bvh->nodes_[cur].aabb.rayIntersect(locOrigin,invDir, enterT, exitT))
                             continue;
 
@@ -130,7 +147,8 @@ namespace game {
 
                                 float t, u, v;
 
-                                if (castRay(locDir, locOrigin, aL, bL, cL, t, u, v, 1e-6f) && t <= bestT && t > 0.0f) {
+                                trigRayCast++;
+                                if (castRay(locDir, locOrigin, aL, bL, cL, t, u, v, 1e-6f) && t < bestT && t > 0.0f) {
 
                                     glm::vec3 n = glm::normalize(glm::cross(bL - aL, cL - aL));
                                     if (glm::dot(n, locDir) > 0.0f) n = -n;
@@ -161,19 +179,28 @@ namespace game {
 
                     }
 
-                    if(isHit && bestT < maxDist_) {
+
+
+                    if(isHit && bestT <= allBestT) {
                         const float bias = 0.015f;
 
                         glm::vec3 hitLocal = locOrigin + locDir * bestT;
                         hitLocal += bestN * bias;
 
-                        glm::vec3 hitWorld = glm::vec3(model * glm::vec4(hitLocal, 1.0f));
-                        points.push_back(hitWorld);
+                        hitWorld = glm::vec3(model * glm::vec4(hitLocal, 1.0f));
+                        allBestT = bestT;
+                        anyHit = true;
+                        // points.push_back(hitWorld);
 
                     }
 
 
                 }
+
+                if(anyHit) {
+                    points.push_back(hitWorld);
+                }
+
 
             }
 
@@ -184,6 +211,14 @@ namespace game {
 
 
         }
+
+        auto end = std::chrono::high_resolution_clock::now();
+        auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
+
+        std::cout << "Duration: " << duration.count() << " ms" << std::endl;
+        std::cout << "Trig RayCast: " << trigRayCast << " " << std::endl;
+        std::cout << "Box RayCast: " << boxRayCast << " " << std::endl;
+        std::cout << "=============================" << std::endl;
 
     };
 
