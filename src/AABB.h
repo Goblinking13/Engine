@@ -12,8 +12,8 @@ class AABB {
    AABB() { reset();}
 
    void reset() {
-      max = glm::vec3(std::numeric_limits<float>::min());
-      min = glm::vec3(std::numeric_limits<float>::max());
+      min = glm::vec3( std::numeric_limits<float>::infinity());
+      max = glm::vec3(-std::numeric_limits<float>::infinity());
    }
 
    void expand(const glm::vec3& p){

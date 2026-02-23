@@ -72,6 +72,7 @@ void game::object::setPosition(const glm::vec3& position) {
 
 
 glm::vec3 game::object::getPosition() const{
+
     return position_;
 }
 
@@ -104,11 +105,12 @@ void game::object::updateModelMatrix() {
     model_ = glm::translate(glm::mat4(1.0f), position_);
     model_ = model_ * glm::toMat4(rotation_);
     model_ = glm::scale(model_, scale_);
+    invModel_ = glm::inverse(model_);
     dirty_ = false;
 }
 
 
-glm::mat4 game::object::getModelMatrix(){
+glm::mat4& game::object::getModelMatrix(){
 
     if (dirty_) {
         updateModelMatrix();
@@ -119,11 +121,25 @@ glm::mat4 game::object::getModelMatrix(){
 }
 
 void game::object::setModelMatrix(const glm::mat4& model){
+    // model_ = model;
     model_ = model;
+    invModel_ = glm::inverse(model_);
+    dirty_ = false;
 
 }
 
 
 void game::object::setRotation(const glm::quat &rotation) {
     rotation_ = rotation;
+    dirty_ = true;
+}
+
+
+glm::mat4& game::object::getInvertMatrix() {
+
+    if(dirty_) {
+        updateModelMatrix();
+    }
+
+    return invModel_;
 }

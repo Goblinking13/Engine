@@ -33,7 +33,7 @@ namespace game {
             glm::vec3 rayDir  = camera_->getCameraDirection();
             rayDir = glm::normalize(rayDir);
 
-            int pointCount= 1000;
+            int pointCount= 500;
             float step = 2;
 
             glm::vec3 forward = glm::normalize(camera_->getCameraDirection());
@@ -43,6 +43,7 @@ namespace game {
             glm::vec3 up    = glm::normalize(glm::cross(right, forward));
 
             std::vector<glm::vec3> points;
+            points.reserve(pointCount);
 
             float yawAngle = 15;
             float pitchAngle = 10;
@@ -76,23 +77,28 @@ namespace game {
 
 
 
-                int pickedIndex = -1;
-                float allBestT = maxDist_;
+                // int pickedIndex = -1;
+                float bestDist = maxDist_*maxDist_;
+                // float allBest
                 bool anyHit = false;
-                glm::vec3 hitWorld;
+                glm::vec3 bestHit;
 
                 for (auto& obj : *meshes_) {
 
                     glm::mat4 model;
+                    glm::mat4 invModel;
                     // model = obj->getModelMatrix();
                     if(obj->getOwner() != nullptr) {
                         auto* tmp = obj->getOwner();
                         model = tmp->getModelMatrix();
+                        invModel = obj->getOwner()->getInvertMatrix();
                     }else {
                         model = obj->getModelMatrix();
+                        invModel = obj->getInvertMatrix();
                     }
 
-                    glm::mat4 invModel = glm::inverse(model);
+
+                    // glm::mat4 invModel = glm::inverse(model);
                     glm::vec3 locOrigin = glm::vec3(invModel * glm::vec4(rayOrig, 1.0f));
 
                     glm::vec3 locDir = glm::vec3(invModel * glm::vec4(nRayDir, 0.0f));
@@ -126,11 +132,11 @@ namespace game {
 
 
                         if(bvh->nodes_[cur].isLeaf) {
-                            pickedIndex = cur;
+                            // pickedIndex = cur;
 
                             const auto& triangles = obj->bvh_->triangles_;
-                            int start = obj->bvh_->nodes_[pickedIndex].indexTrig;
-                            int count = obj->bvh_->nodes_[pickedIndex].countTrig;
+                            int start = obj->bvh_->nodes_[cur].indexTrig;
+                            int count = obj->bvh_->nodes_[cur].countTrig;
 
 
 
@@ -181,15 +187,27 @@ namespace game {
 
 
 
-                    if(isHit && bestT <= allBestT) {
-                        const float bias = 0.015f;
+                    if(isHit) {
+                        const float bias = 0.01f;
 
                         glm::vec3 hitLocal = locOrigin + locDir * bestT;
                         hitLocal += bestN * bias;
 
-                        hitWorld = glm::vec3(model * glm::vec4(hitLocal, 1.0f));
-                        allBestT = bestT;
-                        anyHit = true;
+                        glm::vec3 hitWorld = glm::vec3(model * glm::vec4(hitLocal, 1.0f));
+
+                        glm::vec3 distWorld = hitWorld - rayOrig;
+                        float dist = glm::dot(distWorld, distWorld);
+                        // allBestT = bestT;
+
+                        if(dist <= bestDist) {
+                            bestDist = dist;
+                            bestHit = hitWorld;
+                            anyHit = true;
+
+
+                        }
+
+
                         // points.push_back(hitWorld);
 
                     }
@@ -198,7 +216,7 @@ namespace game {
                 }
 
                 if(anyHit) {
-                    points.push_back(hitWorld);
+                    points.push_back(bestHit);
                 }
 
 
@@ -215,10 +233,10 @@ namespace game {
         auto end = std::chrono::high_resolution_clock::now();
         auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
 
-        std::cout << "Duration: " << duration.count() << " ms" << std::endl;
-        std::cout << "Trig RayCast: " << trigRayCast << " " << std::endl;
-        std::cout << "Box RayCast: " << boxRayCast << " " << std::endl;
-        std::cout << "=============================" << std::endl;
+        // std::cout << "Duration: " << duration.count() << " ms" << std::endl;
+        // std::cout << "Trig RayCast: " << trigRayCast << " " << std::endl;
+        // std::cout << "Box RayCast: " << boxRayCast << " " << std::endl;
+        // std::cout << "=============================" << std::endl;
 
     };
 

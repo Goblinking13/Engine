@@ -18,6 +18,7 @@ namespace game {
 
         int id_;
         glm::mat4 model_;
+        glm::mat4 invModel_;
 
 
         glm::quat rotation_ = glm::quat(1,0,0,0);
@@ -54,7 +55,8 @@ namespace game {
         glm::vec3 getPosition() const;
         glm::vec3 getScale() const;
         glm::quat getRotation() const;
-        glm::mat4 getModelMatrix();
+        glm::mat4& getModelMatrix();
+        glm::mat4& getInvertMatrix();
         void setModelMatrix(const glm::mat4& model);
 
 
