@@ -21,7 +21,7 @@ namespace game {
         accumulatedTime_ += dt;
 
 
-        if(accumulatedTime_ >= 0.01) {
+        if(accumulatedTime_ >= 0.001) {
             accumulatedTime_ = 0;
             glm::vec3 rayOrig = camera_->getPosition();
             glm::vec3 rayDir  = camera_->getCameraDirection();
@@ -64,7 +64,10 @@ namespace game {
 
 
 
-
+                int pickedIndex = -1;
+                float bestT = maxDist_;
+                glm::vec3 bestN;
+                bool isHit = false;
 
                 for (auto& obj : *meshes_) {
 
@@ -82,11 +85,9 @@ namespace game {
 
                     glm::vec3 locDir = glm::vec3(invModel * glm::vec4(nRayDir, 0.0f));
                     locDir = glm::normalize(locDir);
+                    glm::vec3 invDir = 1.0f/locDir;
 
-                    int pickedIndex = -1;
-                    float bestT = maxDist_;
-                    glm::vec3 bestN;
-                    bool isHit = false;
+
 
                     std::stack<int> ids;
                     ids.push(obj->bvh_->root_);
@@ -99,7 +100,7 @@ namespace game {
                         const auto& bvh = obj->bvh_;
 
                         float enterT, exitT;
-                        if(!bvh->nodes_[cur].aabb.rayIntersect(locOrigin,locDir, enterT, exitT))
+                        if(!bvh->nodes_[cur].aabb.rayIntersect(locOrigin,invDir, enterT, exitT))
                             continue;
 
                         if(bestT < enterT)
