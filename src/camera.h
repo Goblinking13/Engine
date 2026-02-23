@@ -30,6 +30,7 @@ namespace game{
         std::vector<shader*> activeShaders;
 
       public:
+        bool rayCastActive = false;
 
         camera(glm::vec3 pos, glm::vec3 front, glm::vec3 up);
 

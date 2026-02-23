@@ -27,7 +27,7 @@ namespace game {
         accumulatedTime_ += dt;
 
 
-        if(accumulatedTime_ >= 0.001) {
+        if(isRayCast() && accumulatedTime_ >= 0.001 ) {
             accumulatedTime_ = 0;
             glm::vec3 rayOrig = camera_->getPosition();
             glm::vec3 rayDir  = camera_->getCameraDirection();

@@ -31,6 +31,7 @@ class EngineCore {
      float frames = 0.0f;
      float lastTime = 0.0f;
 
+     uint32_t keyInput = 0;
 
      void processInput();
 

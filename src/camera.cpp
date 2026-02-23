@@ -36,6 +36,12 @@ void game::camera::getKeyBoardInput() {
 
     glm::vec3 position = getPosition();
     const float dist = speed * deltaTime_;
+
+    if (glfwGetKey(activeWindow_, GLFW_KEY_E) == GLFW_PRESS)
+        rayCastActive = true;
+    else
+        rayCastActive = false;
+
     if (glfwGetKey(activeWindow_, GLFW_KEY_W) == GLFW_PRESS)
        position += cameraFront_ * dist;
     if (glfwGetKey(activeWindow_, GLFW_KEY_S) == GLFW_PRESS)
@@ -48,6 +54,9 @@ void game::camera::getKeyBoardInput() {
         speed = speedUp;
     else
         speed = 3;
+
+
+
 
     setPosition(position);
 

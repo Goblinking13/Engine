@@ -30,6 +30,8 @@ namespace game {
         void render() override;
         void update(float dt);
 
+        bool isRayCast(){ return camera_->rayCastActive; }
+
 
 
     };
