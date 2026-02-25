@@ -2,6 +2,12 @@
 #include "object.h"
 #include "shader.h"
 
+struct point {
+    glm::vec3 position;
+    glm::vec3 color;
+
+};
+
 namespace game {
 
 
@@ -10,16 +16,16 @@ namespace game {
         unsigned int VBO_ = 0;
         shader* shader_ = nullptr;
 
-        std::vector<glm::vec3> points_;
-        size_t maxPoints_ = 20000;   // лимит, иначе память будет расти
-        size_t head_ = 0;             // для ring buffer
+        std::vector<point> points_;
+        size_t maxPoints_ = 20000;
+        size_t head_ = 0;
         bool filed_ = false;
 
     public:
         pointCloud(shader* sh, size_t maxPoints=20000);
 
-        void addPoint(const glm::vec3& p);              // 1 точка
-        void addPoints(const std::vector<glm::vec3>&);  // пачка
+        void addPoint(const point& p);
+        void addPoints(const std::vector<point>&);
         void clear();
 
         void render() override;

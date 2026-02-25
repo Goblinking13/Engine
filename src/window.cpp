@@ -18,9 +18,9 @@ game::window::window(int width, int height) : width_(width), height_(height) {
 
   glEnable(GL_PROGRAM_POINT_SIZE);
 
-  glEnable(GL_BLEND);
-  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-  glEnable(GL_MULTISAMPLE);
+  // glEnable(GL_BLEND);
+  // glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+  // glEnable(GL_MULTISAMPLE);
 
    // glfwSwapInterval(0);
 

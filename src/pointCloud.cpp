@@ -18,10 +18,13 @@ namespace game{
 
         glBindBuffer(GL_ARRAY_BUFFER, VBO_);
         //also try GL_STREAM_DRAW
-        glBufferData(GL_ARRAY_BUFFER, maxPoints_*sizeof(glm::vec3), nullptr, GL_DYNAMIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, maxPoints_*sizeof(point), nullptr, GL_DYNAMIC_DRAW);
 
         glEnableVertexAttribArray(0);
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), nullptr);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(point), (void*)offsetof(point, position));
+
+        glEnableVertexAttribArray(1);
+        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(point), (void*)offsetof(point, color));
 
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         glBindVertexArray(0);
@@ -30,22 +33,19 @@ namespace game{
     }
 
 
-    void pointCloud::addPoint(const glm::vec3& p) {
+    void pointCloud::addPoint(const point& p) {
 
         points_[head_] = p;
 
-
         glBindBuffer(GL_ARRAY_BUFFER, VBO_);
-        glBufferSubData(GL_ARRAY_BUFFER, head_ * sizeof(glm::vec3), sizeof(glm::vec3), &p);
-
-
+        glBufferSubData(GL_ARRAY_BUFFER, head_ * sizeof(point), sizeof(point), &p);
 
         head_++;
         if (head_ >= maxPoints_) { head_ = 0; filed_ = true; }
 
     }
 
-    void pointCloud::addPoints(const std::vector<glm::vec3>& points) {
+    void pointCloud::addPoints(const std::vector<point>& points) {
 
         if(points.empty()) return;
 
@@ -54,9 +54,9 @@ namespace game{
 
         glBindBuffer(GL_ARRAY_BUFFER, VBO_);
         if(count <= dif){
-            memcpy(&points_[head_], points.data(), count * sizeof(glm::vec3));
+            memcpy(&points_[head_], points.data(), count * sizeof(point));
 
-            glBufferSubData(GL_ARRAY_BUFFER, head_ * sizeof(glm::vec3), count*sizeof(glm::vec3), points.data() );
+            glBufferSubData(GL_ARRAY_BUFFER, head_ * sizeof(point), count*sizeof(point), points.data() );
 
 
             head_ = (head_ + count) % maxPoints_;
@@ -65,14 +65,14 @@ namespace game{
         }else{
 
 
-            memcpy(&points_[head_], points.data(), dif * sizeof(glm::vec3));
-            glBufferSubData(GL_ARRAY_BUFFER, head_ * sizeof(glm::vec3), dif*sizeof(glm::vec3), points.data() );
+            memcpy(&points_[head_], points.data(), dif * sizeof(point));
+            glBufferSubData(GL_ARRAY_BUFFER, head_ * sizeof(point), dif*sizeof(point), points.data() );
             head_ = (head_ + dif) % maxPoints_;
 
             int rem = count - dif;
 
-            memcpy(&points_[0], points.data() + dif, rem * sizeof(glm::vec3));
-            glBufferSubData(GL_ARRAY_BUFFER, 0, rem*sizeof(glm::vec3), points.data() + dif);
+            memcpy(&points_[0], points.data() + dif, rem * sizeof(point));
+            glBufferSubData(GL_ARRAY_BUFFER, 0, rem*sizeof(point), points.data() + dif);
             head_ = rem;
             filed_ = true;
 
@@ -85,9 +85,9 @@ namespace game{
 
 
     void pointCloud::clear() {
-        memset(points_.data(), 0, points_.size() * sizeof(glm::vec3));
+        memset(points_.data(), 0, points_.size() * sizeof(point));
         glBindBuffer(GL_ARRAY_BUFFER, VBO_);
-        glBufferSubData(GL_ARRAY_BUFFER, 0, maxPoints_*sizeof(glm::vec3), &points_[0]);
+        glBufferSubData(GL_ARRAY_BUFFER, 0, maxPoints_*sizeof(point), &points_[0]);
 
 
         head_ = 0;

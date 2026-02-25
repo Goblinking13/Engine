@@ -1,7 +1,8 @@
 #version 330 core
 out vec4 FragColor;
 
-uniform vec3 color = vec3(0.0, 1.0, 0.0);
+//uniform vec3 color = vec3(0.0, 1.0, 0.0);
+in vec3 oColor;
 
 void main()
 {
@@ -11,5 +12,5 @@ void main()
     if (r2 > 1.0)
         discard;
 
-    FragColor = vec4(color, 1.0);
+    FragColor = vec4(oColor, 1.0f - r2/2.0f);
 }

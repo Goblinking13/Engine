@@ -7,16 +7,22 @@
 
 namespace game {
 
-    raycaster::raycaster(shader* shader) : pointCloud_(std::make_unique<pointCloud>(shader, 500000))
+    raycaster::raycaster(shader* shader) : pointCloud_(std::make_unique<pointCloud>(shader, 1000000))
     {
 
 
     }
 
     void raycaster::render() {
+        // glEnable(GL_BLEND);
+        // glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         pointCloud_->render();
-  }
+
+
+    }
 
     void raycaster::update(float dt) {
         int trigRayCast = 0;
@@ -27,14 +33,13 @@ namespace game {
         accumulatedTime_ += dt;
 
 
-        if(isRayCast() && accumulatedTime_ >= 0.001 ) {
+        if(isRayCast() && accumulatedTime_ >= 0.01 ) {
             accumulatedTime_ = 0;
             glm::vec3 rayOrig = camera_->getPosition();
             glm::vec3 rayDir  = camera_->getCameraDirection();
             rayDir = glm::normalize(rayDir);
 
-            int pointCount= 500;
-            float step = 2;
+            int pointCount= 100;
 
             glm::vec3 forward = glm::normalize(camera_->getCameraDirection());
             glm::vec3 worldUp(0,1,0);
@@ -42,16 +47,11 @@ namespace game {
             glm::vec3 right = glm::normalize(glm::cross(forward, worldUp));
             glm::vec3 up    = glm::normalize(glm::cross(right, forward));
 
-            std::vector<glm::vec3> points;
+            std::vector<point> points;
             points.reserve(pointCount);
 
-            float yawAngle = 15;
-            float pitchAngle = 10;
-
-
-            // float yawAngle =25;
-            // float pitchAngle = 20;
-
+            float yawAngle = 20;
+            float pitchAngle = 15;
 
 
             std::uniform_real_distribution<float> yawDist(-yawAngle, yawAngle);
@@ -81,7 +81,7 @@ namespace game {
                 float bestDist = maxDist_*maxDist_;
                 // float allBest
                 bool anyHit = false;
-                glm::vec3 bestHit;
+                point bestHit;
 
                 for (auto& obj : *meshes_) {
 
@@ -194,6 +194,8 @@ namespace game {
                         hitLocal += bestN * bias;
 
                         glm::vec3 hitWorld = glm::vec3(model * glm::vec4(hitLocal, 1.0f));
+                        point pointWorld;
+                        pointWorld.position = hitWorld;
 
                         glm::vec3 distWorld = hitWorld - rayOrig;
                         float dist = glm::dot(distWorld, distWorld);
@@ -201,7 +203,7 @@ namespace game {
 
                         if(dist <= bestDist) {
                             bestDist = dist;
-                            bestHit = hitWorld;
+                            bestHit = pointWorld;
                             anyHit = true;
 
 
@@ -216,6 +218,12 @@ namespace game {
                 }
 
                 if(anyHit) {
+                    std::uniform_real_distribution<float> col(0.0f, 0.3f);
+                    float r = col(rng_);
+                    float g = col(rng_);
+                    float b = col(rng_);
+                    glm::vec3 color = glm::vec3(0+r,0.7+g,0+b);
+                    bestHit.color = color;
                     points.push_back(bestHit);
                 }
 
