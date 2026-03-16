@@ -68,6 +68,14 @@ void EngineCore::gameLoop() {
   teapot.rotate({1,0,0},-90.0f);
 
 
+  game::model::Model hand("/Users/artem/Desktop/Hand/Hand.obj");
+  hand.setShader(&textureShader);
+  addObject(&hand);
+  // teapot.setColor({173.0f/255.0f, 10.0f/255.0f, 10.0f/255.0f});
+  hand.setPosition(glm::vec3(0, 3, 7));
+  // teapot.rotate({1,0,0},-90.0f);
+
+
   // game::model::Model text("/Users/artem/Desktop/text.obj");
   // text.setShader(&basicPhongShader);
   // addObject(&text);

@@ -10,6 +10,11 @@
 
 namespace game{
 
+    enum CAMERA_MODE {
+        CAMERA, PLAYER
+
+    };
+
     class camera : public object, public movable, public controllable {
       protected:
 
