@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.30)
-project(RacingGame LANGUAGES CXX)
+project(Engine LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -72,14 +72,14 @@ set(MY_SOURCE_FILES
 )
 
 
-add_executable(RacingGame
+add_executable(Engine
         ${MY_HEADER_FILES}
         ${MY_SOURCE_FILES}
 )
 
-target_compile_definitions(RacingGame PRIVATE GLFW_INCLUDE_GLCOREARB)
+target_compile_definitions(Engine PRIVATE GLFW_INCLUDE_GLCOREARB)
 
-target_link_libraries(RacingGame
+target_link_libraries(Engine
         ${OPENGL_LIBRARY} # filled by "find_package(OpenGL REQUIRED)"
         ${GLUT_glut_LIBRARY}
         glfw
