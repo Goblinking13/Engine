@@ -17,12 +17,13 @@ namespace game::model {
         materialMesh* processMesh(aiMesh* mesh, const aiScene* scene);
         std::vector<texture> loadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName);
 
-        std::vector<materialMesh*> meshes_;
+
         std::string directory_;
         shader* shader_;
 
 
     public:
+        std::vector<materialMesh*> meshes_;
         Model(const char* path);
         void update(float dt) override;
         void render() override;

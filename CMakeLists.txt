@@ -16,6 +16,7 @@ pkg_check_modules(ASSIMP REQUIRED assimp)
 include_directories(${ASSIMP_INCLUDE_DIRS})
 link_directories(${ASSIMP_LIBRARY_DIRS})
 
+
 #find_package(glm REQUIRED)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
@@ -38,7 +39,10 @@ set(MY_HEADER_FILES
         src/rotatedCube.h
         src/texturedCube.h
         src/model.h
-
+        src/raycaster.h
+        src/pointCloud.h
+        src/AABB.h
+        src/BVH.h
 
 )
 
@@ -60,6 +64,10 @@ set(MY_SOURCE_FILES
         src/rotatedCube.cpp
         src/texturedCube.cpp
         src/model.cpp
+        src/raycaster.cpp
+        src/pointCloud.cpp
+        src/AABB.cpp
+        src/BVH.cpp
 
 )
 
@@ -68,6 +76,9 @@ add_executable(RacingGame
         ${MY_HEADER_FILES}
         ${MY_SOURCE_FILES}
 )
+
+target_compile_definitions(RacingGame PRIVATE GLFW_INCLUDE_GLCOREARB)
+
 target_link_libraries(RacingGame
         ${OPENGL_LIBRARY} # filled by "find_package(OpenGL REQUIRED)"
         ${GLUT_glut_LIBRARY}

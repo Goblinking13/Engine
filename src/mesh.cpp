@@ -77,5 +77,18 @@ void game::mesh::loadMesh(const std::vector<Vertex>& vertices,const  std::vector
     vertexCount_ = indices_.size();
     meshLoaded_ = true;
 
+    buildBVH();
+
+
+
 }
+
+
+void game::mesh::buildBVH() {
+    int triCount = (int)indices_.size() / 3;
+    unsigned int depth = std::min(32u, (unsigned)std::ceil(std::log2(std::max(1, triCount))));
+    bvh_ = std::make_unique<BVH>(*this, depth);
+
+}
+
 

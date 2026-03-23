@@ -24,8 +24,10 @@ void game::camera::updateMovable(float dt) {
     view_ = glm::lookAt(position, position + cameraFront_, cameraUp_);
 
     for (const auto& shader : activeShaders) {
+        shader->use();
         shader->loadUniformMat4(view_, "view");
         shader->loadUniformVec3(position, "viewPos");
+        shader->loadUniformVec3(cameraFront_, "viewDir");
     }
 
 }
@@ -34,6 +36,12 @@ void game::camera::getKeyBoardInput() {
 
     glm::vec3 position = getPosition();
     const float dist = speed * deltaTime_;
+
+    if (glfwGetKey(activeWindow_, GLFW_KEY_E) == GLFW_PRESS)
+        rayCastActive = true;
+    else
+        rayCastActive = false;
+
     if (glfwGetKey(activeWindow_, GLFW_KEY_W) == GLFW_PRESS)
        position += cameraFront_ * dist;
     if (glfwGetKey(activeWindow_, GLFW_KEY_S) == GLFW_PRESS)
@@ -46,6 +54,9 @@ void game::camera::getKeyBoardInput() {
         speed = speedUp;
     else
         speed = 3;
+
+
+
 
     setPosition(position);
 
@@ -104,6 +115,7 @@ void game::camera::setActiveWindow(GLFWwindow* window) {
 
 
 void game::camera::update(const float dt) {
+    // std::cout << "camera update " << std::endl;
     updateMovable(dt);
 }
 
@@ -114,5 +126,10 @@ void game::camera::addActiveShader(shader *shader) {
 
 game::camera::~camera() {
 
+}
+
+
+glm::vec3 game::camera::getCameraDirection() {
+    return cameraFront_;
 }
 

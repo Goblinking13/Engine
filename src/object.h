@@ -18,6 +18,7 @@ namespace game {
 
         int id_;
         glm::mat4 model_;
+        glm::mat4 invModel_;
 
 
         glm::quat rotation_ = glm::quat(1,0,0,0);
@@ -28,13 +29,13 @@ namespace game {
         // glm::vec3 scale_ = glm::vec3(1,1,1);
         // glm::vec3 rotation_ = glm::vec3(0, 0, 0);
 
-        void updateModelMatrix();
+
 
         protected:
         bool dirty_ = true;
 
         public:
-
+        void updateModelMatrix();
         object();
         explicit object(const glm::vec3& position);
         virtual void update(float dt) =0;
@@ -46,12 +47,17 @@ namespace game {
         void setRotation(const glm::vec3& rotation);
         void setRotation(const glm::quat& rotation);
         void rotate(const glm::vec3& axis, float angle);
+        void rotateRadian(const glm::vec3& axis, float angle);
+
+
 
 
         glm::vec3 getPosition() const;
         glm::vec3 getScale() const;
         glm::quat getRotation() const;
-        glm::mat4 getModelMatrix();
+        glm::mat4& getModelMatrix();
+        glm::mat4& getInvertMatrix();
+        void setModelMatrix(const glm::mat4& model);
 
 
 

@@ -1,0 +1,293 @@
+#include "raycaster.h"
+#include <glm/gtc/matrix_transform.hpp>
+#include <chrono>
+
+#include <iostream>
+
+
+namespace game {
+
+    raycaster::raycaster(shader* shader) : pointCloud_(std::make_unique<pointCloud>(shader, 1000000))
+    {
+
+
+    }
+
+    void raycaster::render() {
+        // glEnable(GL_BLEND);
+        // glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        pointCloud_->render();
+
+
+    }
+
+    void raycaster::update(float dt) {
+        int trigRayCast = 0;
+        int boxRayCast  =0;
+
+        auto start = std::chrono::high_resolution_clock::now();
+
+        accumulatedTime_ += dt;
+
+
+        if(isRayCast() && accumulatedTime_ >= 0.01 ) {
+            accumulatedTime_ = 0;
+            glm::vec3 rayOrig = camera_->getPosition();
+            glm::vec3 rayDir  = camera_->getCameraDirection();
+            rayDir = glm::normalize(rayDir);
+
+            int pointCount= 100;
+
+            glm::vec3 forward = glm::normalize(camera_->getCameraDirection());
+            glm::vec3 worldUp(0,1,0);
+
+            glm::vec3 right = glm::normalize(glm::cross(forward, worldUp));
+            glm::vec3 up    = glm::normalize(glm::cross(right, forward));
+
+            std::vector<point> points;
+            points.reserve(pointCount);
+
+            float yawAngle = 20;
+            float pitchAngle = 15;
+
+
+            std::uniform_real_distribution<float> yawDist(-yawAngle, yawAngle);
+            std::uniform_real_distribution<float> pitchDist(-pitchAngle, pitchAngle);
+
+
+
+            for(int i = 0; i < pointCount; i++) {
+
+                float yaw   = glm::radians(yawDist(rng_));
+                float pitch = glm::radians(pitchDist(rng_));
+
+
+                glm::mat4 R_yaw = glm::rotate(glm::mat4(1.0f), yaw, up);
+                glm::vec3 d1 = glm::vec3(R_yaw * glm::vec4(forward, 0.0f));
+
+
+                glm::vec3 right2 = glm::normalize(glm::cross(d1, up));
+
+
+                glm::mat4 R_pitch = glm::rotate(glm::mat4(1.0f), pitch, right2);
+                glm::vec3 nRayDir = glm::normalize(glm::vec3(R_pitch * glm::vec4(d1, 0.0f)));
+
+
+
+                // int pickedIndex = -1;
+                float bestDist = maxDist_*maxDist_;
+                // float allBest
+                bool anyHit = false;
+                point bestHit;
+
+                for (auto& obj : *meshes_) {
+
+                    glm::mat4 model;
+                    glm::mat4 invModel;
+                    // model = obj->getModelMatrix();
+                    if(obj->getOwner() != nullptr) {
+                        auto* tmp = obj->getOwner();
+                        model = tmp->getModelMatrix();
+                        invModel = obj->getOwner()->getInvertMatrix();
+                    }else {
+                        model = obj->getModelMatrix();
+                        invModel = obj->getInvertMatrix();
+                    }
+
+
+                    // glm::mat4 invModel = glm::inverse(model);
+                    glm::vec3 locOrigin = glm::vec3(invModel * glm::vec4(rayOrig, 1.0f));
+
+                    glm::vec3 locDir = glm::vec3(invModel * glm::vec4(nRayDir, 0.0f));
+                    locDir = glm::normalize(locDir);
+                    glm::vec3 invDir = 1.0f/locDir;
+
+
+                    float bestT = maxDist_;
+                    glm::vec3 bestN;
+                    bool isHit = false;
+
+
+                    std::stack<int> ids;
+                    ids.push(obj->bvh_->root_);
+
+
+                    while(!ids.empty()) {
+                        int cur = ids.top();
+                        ids.pop();
+
+                        const auto& bvh = obj->bvh_;
+
+                        float enterT, exitT;
+                        boxRayCast++;
+                        if(!bvh->nodes_[cur].aabb.rayIntersect(locOrigin,invDir, enterT, exitT))
+                            continue;
+
+                        if(bestT < enterT)
+                            continue;
+
+
+
+                        if(bvh->nodes_[cur].isLeaf) {
+                            // pickedIndex = cur;
+
+                            const auto& triangles = obj->bvh_->triangles_;
+                            int start = obj->bvh_->nodes_[cur].indexTrig;
+                            int count = obj->bvh_->nodes_[cur].countTrig;
+
+
+
+
+                            for (int k = start; k < start + count; k++) {
+                                int i0 = triangles[k].i0;
+                                int i1 = triangles[k].i1;
+                                int i2 = triangles[k].i2;
+
+                                glm::vec3& aL = obj->vertices_[i0].position;
+                                glm::vec3& bL = obj->vertices_[i1].position;
+                                glm::vec3& cL = obj->vertices_[i2].position;
+
+
+                                float t, u, v;
+
+                                trigRayCast++;
+                                if (castRay(locDir, locOrigin, aL, bL, cL, t, u, v, 1e-6f) && t < bestT && t > 0.0f) {
+
+                                    glm::vec3 n = glm::normalize(glm::cross(bL - aL, cL - aL));
+                                    if (glm::dot(n, locDir) > 0.0f) n = -n;
+
+                                    isHit = true;
+                                    bestT = t;
+                                    bestN = n;
+
+                                }
+                            }
+
+
+
+                            continue;
+                        }
+
+
+
+                        if(bvh->nodes_[cur].left !=  -1) {
+                                ids.push(bvh->nodes_[cur].left);
+                        }
+
+                        if(bvh->nodes_[cur].right !=  -1) {
+                                ids.push(bvh->nodes_[cur].right);
+                        }
+
+
+
+                    }
+
+
+
+                    if(isHit) {
+                        const float bias = 0.01f;
+
+                        glm::vec3 hitLocal = locOrigin + locDir * bestT;
+                        hitLocal += bestN * bias;
+
+                        glm::vec3 hitWorld = glm::vec3(model * glm::vec4(hitLocal, 1.0f));
+                        point pointWorld;
+                        pointWorld.position = hitWorld;
+
+                        glm::vec3 distWorld = hitWorld - rayOrig;
+                        float dist = glm::dot(distWorld, distWorld);
+                        // allBestT = bestT;
+
+                        if(dist <= bestDist) {
+                            bestDist = dist;
+                            bestHit = pointWorld;
+                            anyHit = true;
+
+
+                        }
+
+
+                        // points.push_back(hitWorld);
+
+                    }
+
+
+                }
+
+                if(anyHit) {
+                    std::uniform_real_distribution<float> col(0.0f, 0.3f);
+                    float r = col(rng_);
+                    float g = col(rng_);
+                    float b = col(rng_);
+                    glm::vec3 color = glm::vec3(0+r,0.7+g,0+b);
+                    bestHit.color = color;
+                    points.push_back(bestHit);
+                }
+
+
+            }
+
+                pointCloud_->addPoints(points);
+                // frameCount_ = 0;
+            // }
+
+
+
+        }
+
+        auto end = std::chrono::high_resolution_clock::now();
+        auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
+
+        // std::cout << "Duration: " << duration.count() << " ms" << std::endl;
+        // std::cout << "Trig RayCast: " << trigRayCast << " " << std::endl;
+        // std::cout << "Box RayCast: " << boxRayCast << " " << std::endl;
+        // std::cout << "=============================" << std::endl;
+
+    };
+
+
+
+
+    bool raycaster::castRay(glm::vec3 &dir, glm::vec3 &orig, glm::vec3 &v0, glm::vec3 &v1, glm::vec3 &v2,float &t, float &u, float &v,float eps ) {
+
+        glm::vec3 e1 = v1 - v0;
+        glm::vec3 e2 = v2 - v0;
+
+        glm::vec3 pvec = glm::cross(dir, e2);
+        float det = glm::dot(e1, pvec);
+
+        if (fabs(det) < eps) return false;
+        float invDet = 1.0f / det;
+
+        glm::vec3 tvec = orig - v0;
+        u = glm::dot(tvec, pvec) * invDet;
+        if (u < 0.0f || u > 1.0f) return false;
+
+        glm::vec3 qvec = glm::cross(tvec, e1);
+        v = glm::dot(dir, qvec) * invDet;
+        if (v < 0.0f || u + v > 1.0f) return false;
+
+        t = glm::dot(e2, qvec) * invDet;
+        if (t < eps) return false;
+
+
+        return true;
+
+
+    }
+
+    void raycaster::setSceneMesh(std::vector<materialMesh*>* mesh) {
+        meshes_ = mesh;
+        // bvh_ = std::make_unique<BVH>(meshes_,10);
+
+
+
+
+
+    }
+
+
+}

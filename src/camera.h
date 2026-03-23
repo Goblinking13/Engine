@@ -10,6 +10,11 @@
 
 namespace game{
 
+    enum CAMERA_MODE {
+        CAMERA, PLAYER
+
+    };
+
     class camera : public object, public movable, public controllable {
       protected:
 
@@ -30,6 +35,7 @@ namespace game{
         std::vector<shader*> activeShaders;
 
       public:
+        bool rayCastActive = false;
 
         camera(glm::vec3 pos, glm::vec3 front, glm::vec3 up);
 
@@ -42,6 +48,7 @@ namespace game{
         void getMouseInput() override;
         void setActiveWindow(GLFWwindow* window);
         void addActiveShader(shader* shader);
+        glm::vec3 getCameraDirection();
 
     };
 

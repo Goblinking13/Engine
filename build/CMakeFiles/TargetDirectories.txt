@@ -1,0 +1,3 @@
+/Users/artem/Desktop/engine_test/Engine/build/CMakeFiles/RacingGame.dir
+/Users/artem/Desktop/engine_test/Engine/build/CMakeFiles/edit_cache.dir
+/Users/artem/Desktop/engine_test/Engine/build/CMakeFiles/rebuild_cache.dir

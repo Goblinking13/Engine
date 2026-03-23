@@ -12,8 +12,11 @@ namespace game{
         shader *shader_;
         std::vector<texture> textures_;
         glm::vec3 color_ = glm::vec3(1.0f);
+        game::object* owner_ = nullptr;
+        // bool colorDirty_ = false;
 
         public:
+
 
         materialMesh();
 
@@ -30,12 +33,16 @@ namespace game{
         // void loadMesh(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices) override;
 
         void setShader(shader* shader);
+        shader* getShader() const;
 
         void addTexture(texture texture);
 
         void addTexture(std::vector<texture> texture);
 
         void renderWithoutUniform();
+
+        void setOwner(game::object* owner){ owner_ = owner; }
+        game::object* getOwner() const {return owner_;}
 
 
 
